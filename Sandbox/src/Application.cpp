@@ -1,10 +1,12 @@
-#include <iostream>
-#include "Test.h"
+#include <Bobert.h>
 
-int main() {
-    Bobert::Print(); 
-    
-    std::cout << "Nacisnij dowolny klawisz, aby wyjsc..." << std::endl;
-    std::cin.get(); 
-    return 0;
+class SandBoxApp : public Bobert::Application {
+public:
+    SandBoxApp() {}
+    ~SandBoxApp() {}
+
+};
+
+Bobert::Application* Bobert::CreateApplication() {
+    return new SandBoxApp();
 }

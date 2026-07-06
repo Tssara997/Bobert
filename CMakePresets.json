@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "configurePresets": [
+    {
+      "name": "base",
+      "generator": "Ninja",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/bin/${presetName}",
+      "cacheVariables": {
+        "CXX_STANDARD": "20",
+        "USE_CUSTOM_LIBS": "ON"
+      }
+    },
+
+    {
+      "name": "Debug",
+      "inherits": "base",
+      "description": "Use this preset for debugging.",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+
+    {
+      "name": "Release",
+      "inherits": "base",
+      "description": "Use this preset for release builds.",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "build-Debug",
+      "configurePreset": "Debug"
+    },
+
+    {
+      "name": "build-Release",
+      "configurePreset": "Release"
+    }
+  ]
+}
