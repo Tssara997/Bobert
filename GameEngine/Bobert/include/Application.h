@@ -1,9 +1,13 @@
 #pragma once
 #include "Core.h"
+#include "Logger.h"
 
 namespace Bobert {
   class Bobert_API Application {
+    private:
+      Logger log;
     public:
+    
       Application();
       virtual ~Application();
 

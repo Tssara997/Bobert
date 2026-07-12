@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(Bobert)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
-add_library(Bobert SHARED Bobert/src/Application.cpp)
+add_library(Bobert SHARED Bobert/src/Application.cpp Bobert/src/Logger.cpp)
 
 install(TARGETS Bobert DESTINATION lib)
 install(FILES Bobert/Bobert.h DESTINATION include)
