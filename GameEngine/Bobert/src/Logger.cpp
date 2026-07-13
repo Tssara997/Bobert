@@ -13,13 +13,11 @@ namespace Bobert {
   }
 
   void Logger::Log(const std::string& message, Level level) {
-    // auto now = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::current_zone()->to_local(std::chrono::system_clock::now()));
-
     auto levelStrV = GetLevelString(level);
     auto timeStr = GetLocalTimeString();
 
-    std::string log = std::vformat("[{}] [{}] {}", std::make_format_args(timeStr, levelStrV,  message));
-    // std::string log = GetLocalTimeString() + " [" + GetLevelString(level) + "] " + message;
+    // możliwość optymalizacji poźniej, zamiast pushować std::string do kolejny, pushować arg (queue.push({fmt, timeStr, levelStrV, message}))
+    std::string log = std::vformat(fmt, std::make_format_args(timeStr, levelStrV,  message));
 
     queueMutex.lock();
     logQueue.push(log);
@@ -102,7 +100,9 @@ namespace Bobert {
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
 
     std::tm now_tm;
+  #ifdef BB_PLATFORM_WINDOWS
     localtime_s(&now_tm, &now_c); // tylko Windows
+  #endif
 
     std::ostringstream oss;
     oss << std::put_time(&now_tm, "%H:%M:%S");
