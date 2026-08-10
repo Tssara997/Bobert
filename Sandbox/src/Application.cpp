@@ -1,4 +1,5 @@
 #include <Bobert.h>
+// #include <Bobert/EntryPoint.h>
 
 class SandBoxApp : public Bobert::Application {
 public:

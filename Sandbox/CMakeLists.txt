@@ -9,6 +9,14 @@ if (USE_CUSTOM_LIBS)
     target_link_libraries(Sandbox PRIVATE Bobert)
 endif()
 
-set_target_properties(Sandbox PROPERTIES
+if (WIN$32)
+    set_target_properties(Sandbox PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+elseif (UNIX AND NOT APPLE)
+    set_target_properties(Sandbox PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Sandbox"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Sandbox"
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lib"
+    )
+endif()
