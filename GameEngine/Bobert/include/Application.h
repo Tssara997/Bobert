@@ -6,6 +6,8 @@ namespace Bobert {
   class Bobert_API Application {
     private:
       Logger log;
+
+      static void key_callback(GLFWwindow*, int key, int scancode, int action, int mods);
     public:
     
       Application();

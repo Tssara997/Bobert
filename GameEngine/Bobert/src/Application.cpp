@@ -14,53 +14,66 @@ namespace Bobert {
     log.Info("Engine is working");
     log.Info("Logger is working");
 
-    // 1. Inicjalizacja GLFW
     if (!glfwInit()) {
-        std::cerr << "Nie udalo sie zainicjalizowac GLFW!" << std::endl;
+        log.Error("Failed to initialize GLFW");
+        log.Info("Engine is closing");
         return;
     }
 
-    // Konfiguracja wersji OpenGL (np. Core Profile 3.3)
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    log.Info("Initialization GLFW succsefull");
 
-    // 2. Tworzenie okna
+
+    // // Konfiguracja wersji OpenGL (np. Core Profile 3.3)
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     GLFWwindow* window = glfwCreateWindow(800, 600, "Bobert Engine - Test", nullptr, nullptr);
     if (!window) {
-        std::cerr << "Nie udalo sie utworzyc okna GLFW!" << std::endl;
+        log.Error("Failed to create a GLFW window");
         glfwTerminate();
+        log.Info("Terminated GLFW");
+        log.Info("Engine is closing");
         return;
     }
+    log.Info("Created a GLFW window");
 
-    // Ustawienie kontekstu OpenGL dla okna
     glfwMakeContextCurrent(window);
 
-    // 3. Inicjalizacja GLAD (musi być po utworzeniu kontekstu GLFW)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Nie udalo sie zainicjalizowac GLAD!" << std::endl;
+        log.Error("Failed to initialize GLAD");
         glfwDestroyWindow(window);
+        log.Info("Detroyed window");
         glfwTerminate();
+        log.Info("Terminated GLFW");
+        log.Info("Engine is closing");
         return;
     }
 
-    std::cout << "Sukces! OpenGL initialized. Wersja: " << glGetString(GL_VERSION) << std::endl;
+    log.Info("Initialization GLAD succsefull")
 
-    // 4. Główna pętla aplikacji
-    while (!glfwWindowShouldClose(window)) {
-        // Czyszczenie ekranu (np. na ładny ciemny kolor)
+    glfwSetKeyCallback(window, key_callback);
+
+    while (!glfwWindowShouldClose(window) &&  glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS) {
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Obsługa zdarzeń (klawiatura, mysz itp.) i wymiana buforów
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
 
-    // 5. Sprzątanie po zamknięciu okna
     glfwDestroyWindow(window);
+    log.Info("Destroyed window");
     glfwTerminate();
+    log.Info("Terminated GLFW");
 
     log.Info("Engine is closing");
   }
+
+  void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+      std::cout << "PRESSED Q" << std::endl;
+    }
+  }
 }
+
