@@ -10,6 +10,10 @@
 #include <atomic>
 #include <condition_variable>
 #include <thread>
+#include <array>
+#include <map>
+#include <functional>
+#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

@@ -1,12 +1,28 @@
 #include "include/Application.h"
 
+// std::array<float, 4> Bobert::Application::backgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};
+bool Bobert::Application::windowShouldClose = Bobert::Application::defWindowShouldClose;
+
 namespace Bobert {
-  Application::Application() {
+  Application::Application() : eventManager{} {
     log.Init();
+    windowBehaviour = new WindowBehaviour();
+    eventManager.Subscribe<KeyEvent>(KeyEvent::GetStaticType(), [this](const KeyEvent& e) {
+      windowBehaviour->OnKeyInput(e); 
+    });
+    eventManager.Subscribe<MouseEvent>(MouseEvent::GetStaticType(), [this](const MouseEvent& e) {
+      windowBehaviour->OnMouseInput(e);
+    });
+  }
+
+  void Application::SetWindowBehaviour(WindowBehaviour* newBehaviour) {
+    delete windowBehaviour;
+    windowBehaviour = newBehaviour;
   }
 
   Application::~Application() {
     // Destruktor klasy Application
+    delete windowBehaviour;
   }
 
   void Application::Run() {
@@ -37,43 +53,56 @@ namespace Bobert {
         return;
     }
     log.Info("Created a GLFW window");
+    glfwSetWindowUserPointer(window, this);
 
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         log.Error("Failed to initialize GLAD");
-        glfwDestroyWindow(window);
-        log.Info("Detroyed window");
-        glfwTerminate();
-        log.Info("Terminated GLFW");
+        ShutDown(window);
         log.Info("Engine is closing");
         return;
     }
 
-    log.Info("Initialization GLAD succsefull")
+    log.Info("Initialization GLAD succsefull");
 
     glfwSetKeyCallback(window, key_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
-    while (!glfwWindowShouldClose(window) &&  glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS) {
-        glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
+    while (!windowShouldClose && !glfwWindowShouldClose(window)) {
+        glClearColor(windowBehaviour->backgroundColor[0], windowBehaviour->backgroundColor[1], windowBehaviour->backgroundColor[2], windowBehaviour->backgroundColor[3]);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
-
-    glfwDestroyWindow(window);
-    log.Info("Destroyed window");
-    glfwTerminate();
-    log.Info("Terminated GLFW");
-
+    ShutDown(window);
     log.Info("Engine is closing");
   }
 
   void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-      std::cout << "PRESSED Q" << std::endl;
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+      windowShouldClose = true;
     }
+    if (action != GLFW_PRESS)
+      return;
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+    app->eventManager.TriggerEvent(KeyEvent(key));
+  }
+
+  void Application::mouse_button_callback(GLFWwindow* window, int button, int action, int mode) {
+    if (action != GLFW_PRESS) 
+      return;
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+    app->eventManager.TriggerEvent(MouseEvent(button));
+    // app->log.Info("MOUSE BUTTON PRESS");
+  }
+
+  void Application::ShutDown(GLFWwindow* window) {
+    glfwDestroyWindow(window);
+    log.Info("Destroyed window");
+    glfwTerminate();
+    log.Info("Terminated GLFW");
   }
 }
 

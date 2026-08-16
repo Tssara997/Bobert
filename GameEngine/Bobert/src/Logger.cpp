@@ -25,7 +25,7 @@ namespace Bobert {
     cv.notify_one();
   }
 
-  void Logger::Info(const std::string& message) {
+  void Logger::Info(const std::string& message) { 
     Log(message, Level::INFO);
   }
 
@@ -103,7 +103,7 @@ namespace Bobert {
   #ifdef BB_PLATFORM_WINDOWS
     localtime_s(&now_tm, &now_c); // tylko Windows
   #elseif BB_PLATFORM_LINUX
-    localtime_r(&now_tm, &now_c);
+    localtime_r(&now_tm, &now_c); // chyba zle dziala
   #endif
 
     std::ostringstream oss;
