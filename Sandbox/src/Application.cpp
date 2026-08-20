@@ -4,7 +4,7 @@
 class Window : public Bobert::WindowBehaviour {
     public:
     void OnKeyInput(const Bobert::KeyEvent& e) override {
-        std::cout << e.key << std::endl;
+        // std::cout << e.key << std::endl;
         if (e.key == 71) {
             ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
         }
@@ -18,10 +18,18 @@ class Window : public Bobert::WindowBehaviour {
     }
 };
 
+class IDK : public Bobert::WindowBehaviour {
+    public:
+    void OnKeyInput(const Bobert::KeyEvent& e) override {
+        std::cout << "IDK: " << e.key << std::endl;
+    }
+};
+
 class SandBoxApp : public Bobert::Application {
 public:
     SandBoxApp() {
         SetWindowBehaviour(new Window());
+        SetWindowBehaviour(new IDK());
     } 
     ~SandBoxApp() {}
 

@@ -1,9 +1,8 @@
 #pragma once
-#include "Core.h"
-#include "Event.h"
+#include "Behaviour.h"
 
 namespace Bobert {
-    class Bobert_API WindowBehaviour {
+    class Bobert_API WindowBehaviour : public Behaviour {
         public:
             WindowBehaviour() {
                 backgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};
@@ -14,7 +13,5 @@ namespace Bobert {
         
         public:
             std::array<float, 4> backgroundColor;
-            virtual void OnKeyInput(const KeyEvent& e) {};
-            virtual void OnMouseInput(const MouseEvent& e) {};
     };
 };
