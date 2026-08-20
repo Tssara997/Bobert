@@ -7,6 +7,10 @@ namespace Bobert {
   Application::Application() : eventManager{} {
     log.Init();
     windowBehaviour = new WindowBehaviour();
+    Subscriptions();
+  }
+
+  void Application::Subscriptions() {
     eventManager.Subscribe<KeyEvent>(KeyEvent::GetStaticType(), [this](const KeyEvent& e) {
       windowBehaviour->OnKeyInput(e); 
     });
@@ -57,7 +61,7 @@ namespace Bobert {
 
     glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
         log.Error("Failed to initialize GLAD");
         ShutDown(window);
         log.Info("Engine is closing");
@@ -95,7 +99,6 @@ namespace Bobert {
       return;
     Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
     app->eventManager.TriggerEvent(MouseEvent(button));
-    // app->log.Info("MOUSE BUTTON PRESS");
   }
 
   void Application::ShutDown(GLFWwindow* window) {

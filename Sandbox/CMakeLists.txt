@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 project(Sandbox)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -12,7 +12,7 @@ endif()
 if (WIN$32)
     set_target_properties(Sandbox PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+    )
 elseif (UNIX AND NOT APPLE)
     set_target_properties(Sandbox PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Sandbox"
