@@ -102,8 +102,8 @@ namespace Bobert {
     std::tm now_tm;
   #ifdef BB_PLATFORM_WINDOWS
     localtime_s(&now_tm, &now_c); // tylko Windows
-  #elseif BB_PLATFORM_LINUX
-    localtime_r(&now_tm, &now_c); // chyba zle dziala
+  #elif BB_PLATFORM_LINUX
+    localtime_r(&now_c, &now_tm); // chyba zle dziala
   #endif
 
     std::ostringstream oss;
