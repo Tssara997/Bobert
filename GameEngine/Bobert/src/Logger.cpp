@@ -2,9 +2,9 @@
 
 namespace Bobert {
   void Logger::Init() {
-    std::ofstream logFile(FileAdress.data(), std::ios::out | std::ios::trunc);
+    std::ofstream logFile(FullPath, std::ios::out | std::ios::trunc);
     if (!logFile.is_open()) {
-      std::cerr << "Failed to open log file: " << FileAdress << std::endl;
+      std::cerr << "Failed to open log file: " << LoggerName << std::endl;
       return;
     }
     logFile.close();
@@ -46,7 +46,7 @@ namespace Bobert {
   }
 
   void Logger::ProcessQueue() {
-    std::ofstream file(FileAdress.data(), std::ios::app);
+    std::ofstream file(FullPath, std::ios::app);
 
     while(true){
       std::unique_lock<std::mutex> lock1(queueMutex);

@@ -21,7 +21,7 @@ namespace Bobert {
     private:
       static inline std::chrono::system_clock::time_point TimeStart = std::chrono::system_clock::now();
       static constexpr std::string_view LoggerName = "Bobert_logger";
-      static constexpr std::string_view FileAdress = "Bobert.log";
+      const std::filesystem::path FullPath = "Bobert.log";
       static constexpr std::string_view fmt = "[{}] [{}] {}";
 
       std::queue<std::string> logQueue;

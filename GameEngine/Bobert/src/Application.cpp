@@ -6,27 +6,29 @@ bool Bobert::Application::windowShouldClose = Bobert::Application::defWindowShou
 namespace Bobert {
   Application::Application() : eventManager{} {
     log.Init();
-    windowBehaviour = new WindowBehaviour();
-    Subscriptions();
+    InitEventSubscriptions();
+    AddWindowBehaviour<WindowBehaviour>();
+    backgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};
   }
 
-  void Application::Subscriptions() {
-    eventManager.Subscribe<KeyEvent>(KeyEvent::GetStaticType(), [this](const KeyEvent& e) {
-      windowBehaviour->OnKeyInput(e); 
+  void Application::InitEventSubscriptions() {
+    eventManager.Subscribe<KeyPressEvent>(KeyPressEvent::GetStaticType(), [this](const KeyPressEvent& e) {
+      for (auto& winBeh : windowBehaviours)
+        winBeh->OnKeyPress(e);
+    });
+    eventManager.Subscribe<KeyReleaseEvent>(KeyReleaseEvent::GetStaticType(), [this](const KeyReleaseEvent& e) {
+      for (auto& winBeh : windowBehaviours)
+        winBeh->OnKeyRelease(e);
     });
     eventManager.Subscribe<MouseEvent>(MouseEvent::GetStaticType(), [this](const MouseEvent& e) {
-      windowBehaviour->OnMouseInput(e);
+      for (auto& winBeh : windowBehaviours)
+        winBeh->OnMouse(e);
     });
   }
 
-  void Application::SetWindowBehaviour(WindowBehaviour* newBehaviour) {
-    delete windowBehaviour;
-    windowBehaviour = newBehaviour;
-  }
 
   Application::~Application() {
     // Destruktor klasy Application
-    delete windowBehaviour;
   }
 
   void Application::Run() {
@@ -74,24 +76,35 @@ namespace Bobert {
     glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     while (!windowShouldClose && !glfwWindowShouldClose(window)) {
-        glClearColor(windowBehaviour->backgroundColor[0], windowBehaviour->backgroundColor[1], windowBehaviour->backgroundColor[2], windowBehaviour->backgroundColor[3]);
+        glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwPollEvents();
         glfwSwapBuffers(window);
+        Update();
     }
     ShutDown(window);
     log.Info("Engine is closing");
   }
 
-  void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-      windowShouldClose = true;
+  void Application::Update() {
+    for (auto& windowBeh : windowBehaviours) {
+      if (!windowBeh->handled) {
+        backgroundColor = windowBeh->backgroundColor;
+        windowBeh->handled = true;
+      }
     }
-    if (action != GLFW_PRESS)
-      return;
+  }
+
+  // void Application::window_should_close_callback()
+
+  void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-    app->eventManager.TriggerEvent(KeyEvent(key));
+
+    if (action == GLFW_RELEASE)
+      app->eventManager.TriggerEvent(KeyReleaseEvent(key));
+    else
+      app->eventManager.TriggerEvent(KeyPressEvent(key, action == GLFW_REPEAT));
   }
 
   void Application::mouse_button_callback(GLFWwindow* window, int button, int action, int mode) {
@@ -107,5 +120,5 @@ namespace Bobert {
     glfwTerminate();
     log.Info("Terminated GLFW");
   }
-}
+};
 

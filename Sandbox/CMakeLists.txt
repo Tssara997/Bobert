@@ -20,3 +20,10 @@ elseif (UNIX AND NOT APPLE)
         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lib"
     )
 endif()
+
+add_custom_command(TARGET Sandbox POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:Bobert>
+        $<TARGET_FILE_DIR:Sandbox>
+    COMMENT "Kopiowanie Bobert.dll do folderu gry..."
+)

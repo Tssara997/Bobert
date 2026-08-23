@@ -1,5 +1,5 @@
 #pragma once
-#include "Core.h"
+#include "include\Core.h"
 #include "Event.h"
 
 namespace Bobert {
@@ -28,26 +28,27 @@ namespace Bobert {
 
     class Bobert_API EventManager
     {
-        private:
-            std::queue<Event> eventQueue;
-            std::unordered_map<std::string, std::vector<std::unique_ptr<IEventManagerWrapper>>> subs;
-
         public:
+            EventManager() : subs{} { subs.resize(static_cast<int>(EventTypeEnum::Count)); }
+
             void TriggerEvent(const Event& event) {
-                auto it = subs.find(event.GetEventType());
-                if (it == subs.end())
+                const auto& func = subs[event.GetEventType()];
+                if (func.size() == 0)
                     return;
 
-                for (const auto& subcriber : it->second) {
+                for (const auto& subcriber : func) {
                     subcriber->Execute(event);
                 }
             }
             template <typename EventType>
-            void Subscribe(const std::string& eventTypeStr, const EventHandler<EventType>& handler) {
-                std::cout << eventTypeStr << std::endl;
-                subs[eventTypeStr].push_back(std::make_unique<EventManagerWrapper<EventType>>(handler));
+            void Subscribe(const EventTypeEnum& eventTypeEnum, const EventHandler<EventType>& handler) {
+                std::cout << int(eventTypeEnum) << std::endl;
+                subs[eventTypeEnum].push_back(std::make_unique<EventManagerWrapper<EventType>>(handler));
             }
 
-
+        private:
+            std::queue<Event> eventQueue;
+            // std::unordered_map<EventTypeEnum, std::vector<std::unique_ptr<IEventManagerWrapper>>> subs;
+            std::vector<std::vector<std::unique_ptr<IEventManagerWrapper>>> subs;
     };
 };

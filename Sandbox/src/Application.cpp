@@ -1,40 +1,34 @@
 #include <Bobert.h>
 #include <iostream>
 
-class Window : public Bobert::WindowBehaviour {
+class WindowColor : public Bobert::WindowBehaviour {
     public:
-    void OnKeyInput(const Bobert::KeyEvent& e) override {
-        // std::cout << e.key << std::endl;
-        if (e.key == 71) {
+    void OnKeyPress(const Bobert::KeyPressEvent& e) override {
+        if (e.GetKey() == 71) {
             ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
         }
-        if (e.key == 72) {
-            ChangeBackgroundColor(.1f, 0.1f, 0.15f, 1.0f);
-        }
-    }
-
-    void OnMouseInput(const Bobert::MouseEvent& e) override {
-        std::cout << e.button << std::endl;
     }
 };
 
-class IDK : public Bobert::WindowBehaviour {
+class Window : public Bobert::WindowBehaviour {
     public:
-    void OnKeyInput(const Bobert::KeyEvent& e) override {
-        std::cout << "IDK: " << e.key << std::endl;
-    }
+        void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
+            if (e.GetKey() == 71) {
+                ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
+            }
+        }
 };
 
 class SandBoxApp : public Bobert::Application {
 public:
     SandBoxApp() {
-        SetWindowBehaviour(new Window());
-        SetWindowBehaviour(new IDK());
-    } 
+        AddWindowBehaviour<WindowColor>();
+        AddWindowBehaviour<Window>();
+    }
     ~SandBoxApp() {}
 
 private:
-    Window* window;
+    // Window* window;
 
 };
 
