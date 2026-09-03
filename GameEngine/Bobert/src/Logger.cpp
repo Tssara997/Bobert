@@ -1,11 +1,13 @@
 #include "include/Logger.h"
 
-std::atomic<bool> Bobert::Logger::running = true;
-const std::filesystem::path Bobert::Logger::fullPath = "Bobert.log";
-
 namespace Bobert {
 
   void Logger::Init() {
+    if (initialized) {
+      Warning("Tried to initialize Logger after already initializing it");
+      return;
+    }
+
     std::ofstream logFile(fullPath, std::ios::out | std::ios::trunc);
     if (!logFile.is_open()) {
       std::cerr << "Failed to open log file: " << LoggerName << std::endl;
@@ -14,8 +16,10 @@ namespace Bobert {
     logFile.close();
 
     workerThread = std::thread(&Logger::ProcessQueue);
-    Info("Logger is working");
+    initialized = true;
+    Info("Initialization Logger succseful");
   }
+
 
   void Logger::Log(const std::string& message, Level level) {
     auto levelStrV = GetLevelString(level);
@@ -24,55 +28,64 @@ namespace Bobert {
     // możliwość optymalizacji poźniej, zamiast pushować std::string do kolejny, pushować arg (queue.push({fmt, timeStr, levelStrV, message}))
     std::string log = std::vformat(fmt, std::make_format_args(timeStr, levelStrV,  message));
 
-    queueMutex.lock();
-    logQueue.push(log);
-    queueMutex.unlock();
+    {
+      std::lock_guard<std::mutex> lock(queueMutex);
+      logQueue.push(log);
+    }
     cv.notify_one();
   }
+
 
   void Logger::Info(const std::string& message) { 
     Log(message, Level::INFO);
   }
 
+
+
   void Logger::Debug(const std::string& message) {
     Log(message, Level::DEBUG);
   }
+
 
   void Logger::Warning(const std::string& message) {
     Log(message, Level::WARNING);
   }
 
+
   void Logger::Error(const std::string& message) {
     Log(message, Level::ERROR);
   }
+
 
   void Logger::Critical(const std::string& message) {
     Log(message, Level::CRITICAL);
   }
 
+
   void Logger::ProcessQueue() {
     std::ofstream file(fullPath, std::ios::app);
 
     while(true){
-      std::unique_lock<std::mutex> lock1(queueMutex);
+      std::string log;
 
-      cv.wait(lock1, [] {return !logQueue.empty() || !running; });
+      {
+        std::unique_lock<std::mutex> lock(queueMutex);
 
-      if (!running && logQueue.empty())
-        break;
+        cv.wait(lock, [] {return !logQueue.empty() || !running; });
 
-      std::string log = logQueue.front();
-      logQueue.pop();
+        if (!running && logQueue.empty())
+          break;
 
-      lock1.unlock();
+        log = std::move(logQueue.front());
+        logQueue.pop();
+      }
 
       if (file.is_open()) {
         file << log << std::endl;
       }
     }
-
-    file.close();
   }
+
 
   void Logger::Shutdown() {
     {
@@ -85,6 +98,7 @@ namespace Bobert {
       workerThread.join();
   }
 
+
   std::string_view Logger::GetLevelString(Level level) {
    switch (level) {
         case Level::INFO:     return "INFO";
@@ -95,6 +109,7 @@ namespace Bobert {
         default:              return "UNKNOWN";
     }
   }
+
 
   std::string Logger::GetLocalTimeString() {
     auto now = std::chrono::system_clock::now();

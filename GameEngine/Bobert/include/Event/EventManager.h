@@ -30,8 +30,8 @@ namespace Bobert {
     class Bobert_API EventManager
     {
         public:
-            EventManager() : subs{} {
-                subs.resize(static_cast<int>(EventTypeEnum::Count));
+            EventManager() : subs(static_cast<size_t>(EventTypeEnum::Count)) {
+                Logger::Info("Initialization Event system succseful");
             }
 
             void TriggerEvent(const Event& event) {

@@ -3,12 +3,14 @@
 bool Bobert::Application::windowShouldClose = Bobert::Application::defWindowShouldClose;
 
 namespace Bobert {
+
   Application::Application() : eventManager{} {
     Logger::Init();
     InitEventSubscriptions();
     AddWindowBehaviour<WindowBehaviour>();
     backgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};
   }
+
 
   void Application::InitEventSubscriptions() {
     eventManager.Subscribe<KeyPressEvent>(KeyPressEvent::GetStaticType(), [this](const KeyPressEvent& e) {
@@ -31,6 +33,7 @@ namespace Bobert {
     // Destruktor klasy Application
   }
 
+
   void Application::Run() {
 
     if (!glfwInit()) {
@@ -39,7 +42,7 @@ namespace Bobert {
         return;
     }
 
-    Logger::Info("Initialization GLFW succsefull");
+    Logger::Info("Initialization GLFW succseful");
 
 
     // // Konfiguracja wersji OpenGL (np. Core Profile 3.3)
@@ -67,7 +70,7 @@ namespace Bobert {
         return;
     }
 
-    Logger::Info("Initialization GLAD succsefull");
+    Logger::Info("Initialization GLAD succseful");
 
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -84,6 +87,7 @@ namespace Bobert {
     ShutDown(window);
   }
 
+
   void Application::Update() {
     for (auto& windowBeh : windowBehaviours) {
       if (!windowBeh->handled) {
@@ -93,7 +97,9 @@ namespace Bobert {
     }
   }
 
+
   // void Application::window_should_close_callback()
+
 
   void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
@@ -104,6 +110,7 @@ namespace Bobert {
       app->eventManager.TriggerEvent(KeyPressEvent(key, action == GLFW_REPEAT));
   }
 
+
   void Application::mouse_button_callback(GLFWwindow* window, int button, int action, int mode) {
     if (action != GLFW_PRESS) 
       return;
@@ -111,10 +118,12 @@ namespace Bobert {
     app->eventManager.TriggerEvent(MouseEvent(button));
   }
 
+
   void Application::OnKeyPress(const KeyPressEvent& e) {
     if (e.GetKey() == 256)
       windowShouldClose = true;
   }
+
 
   void Application::ShutDown(GLFWwindow* window) {
     Logger::Info("Engine is closing");
