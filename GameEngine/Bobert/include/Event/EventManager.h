@@ -1,6 +1,7 @@
 #pragma once
 #include "include\Core.h"
 #include "Event.h"
+#include "include\Logger.h"
 
 namespace Bobert {
     template <typename EventType>
@@ -29,7 +30,9 @@ namespace Bobert {
     class Bobert_API EventManager
     {
         public:
-            EventManager() : subs{} { subs.resize(static_cast<int>(EventTypeEnum::Count)); }
+            EventManager() : subs{} {
+                subs.resize(static_cast<int>(EventTypeEnum::Count));
+            }
 
             void TriggerEvent(const Event& event) {
                 const auto& func = subs[event.GetEventType()];
@@ -40,15 +43,18 @@ namespace Bobert {
                     subcriber->Execute(event);
                 }
             }
+
             template <typename EventType>
             void Subscribe(const EventTypeEnum& eventTypeEnum, const EventHandler<EventType>& handler) {
-                std::cout << int(eventTypeEnum) << std::endl;
+                std::string text = "Subscription of an event of id:";
+                auto id = int(eventTypeEnum);
+                std::string msg = std::vformat("{} {}", std::make_format_args(text, id));
+                Logger::Info(msg);
                 subs[eventTypeEnum].push_back(std::make_unique<EventManagerWrapper<EventType>>(handler));
             }
 
         private:
             std::queue<Event> eventQueue;
-            // std::unordered_map<EventTypeEnum, std::vector<std::unique_ptr<IEventManagerWrapper>>> subs;
             std::vector<std::vector<std::unique_ptr<IEventManagerWrapper>>> subs;
     };
 };

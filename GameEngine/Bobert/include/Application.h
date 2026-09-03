@@ -16,9 +16,9 @@ namespace Bobert {
       template <typename B>
       B* AddWindowBehaviour() {
         auto behaviour = std::make_unique<B>();
-      B* raw_ptr = behaviour.get();
-      windowBehaviours.push_back(std::move(behaviour));
-      return raw_ptr;
+        B* raw_ptr = behaviour.get();
+        windowBehaviours.push_back(std::move(behaviour));
+        return raw_ptr;
       }
 
       void Run();
@@ -26,7 +26,6 @@ namespace Bobert {
     protected:
       std::vector<std::unique_ptr<WindowBehaviour>> windowBehaviours;
       EventManager eventManager;
-      Logger log;
       
     private:
       static constexpr bool defWindowShouldClose = false;
@@ -35,6 +34,7 @@ namespace Bobert {
 
       void InitEventSubscriptions();
       void Update();
+      void OnKeyPress(const KeyPressEvent& e);
       static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods); // TEMP
       static void mouse_button_callback(GLFWwindow* window, int button, int action, int mode); // TEMP
       // static void window_should_close_callback(); // TEMP

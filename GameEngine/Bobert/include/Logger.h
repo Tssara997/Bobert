@@ -7,32 +7,39 @@ namespace Bobert {
 
       typedef enum class Level {INFO = 0, DEBUG, WARNING, ERROR, CRITICAL} Level;
 
-      Logger() = default;
-      ~Logger();
-      void Init();
-      void Log(const std::string& message, Level level = Level::INFO);
-      void Info(const std::string& message);
-      void Debug(const std::string& message);
-      void Warning(const std::string& message);
-      void Error(const std::string& message);
-      void Critical(const std::string& message);
-      void Shutdown();
+      static void Init();
+      static void Log(const std::string& message, Level level = Level::INFO);
+      static void Info(const std::string& message);
+      static void Debug(const std::string& message);
+      static void Warning(const std::string& message);
+      static void Error(const std::string& message);
+      static void Critical(const std::string& message);
+      static void Shutdown();
+
+      ~Logger() = default;
 
     private:
-      static inline std::chrono::system_clock::time_point TimeStart = std::chrono::system_clock::now();
+      Logger();
+
+      inline static std::chrono::system_clock::time_point TimeStart = std::chrono::system_clock::now();
       static constexpr std::string_view LoggerName = "Bobert_logger";
-      const std::filesystem::path FullPath = "Bobert.log";
+      static const std::filesystem::path fullPath;
       static constexpr std::string_view fmt = "[{}] [{}] {}";
 
-      std::queue<std::string> logQueue;
-      std::mutex queueMutex;
-      std::condition_variable cv;
-      std::thread workerThread;
-      std::atomic<bool> running = true;
+      inline static std::queue<std::string> logQueue;
+      inline static std::mutex queueMutex;
+      inline static std::condition_variable cv;
+      inline static std::thread workerThread;
+      static std::atomic<bool> running;
 
-      void ProcessQueue();
+      static void ProcessQueue();
 
-      std::string_view GetLevelString(Level level);
-      std::string GetLocalTimeString();
+      static std::string_view GetLevelString(Level level);
+      static std::string GetLocalTimeString();
+
+      static Logger& GetInstant() {
+        static Logger log;
+        return log;
+      }
   };
 }

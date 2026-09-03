@@ -1,15 +1,20 @@
 #include "include/Logger.h"
 
+std::atomic<bool> Bobert::Logger::running = true;
+const std::filesystem::path Bobert::Logger::fullPath = "Bobert.log";
+
 namespace Bobert {
+
   void Logger::Init() {
-    std::ofstream logFile(FullPath, std::ios::out | std::ios::trunc);
+    std::ofstream logFile(fullPath, std::ios::out | std::ios::trunc);
     if (!logFile.is_open()) {
       std::cerr << "Failed to open log file: " << LoggerName << std::endl;
       return;
     }
     logFile.close();
 
-    workerThread = std::thread(&Logger::ProcessQueue, this);
+    workerThread = std::thread(&Logger::ProcessQueue);
+    Info("Logger is working");
   }
 
   void Logger::Log(const std::string& message, Level level) {
@@ -46,12 +51,12 @@ namespace Bobert {
   }
 
   void Logger::ProcessQueue() {
-    std::ofstream file(FullPath, std::ios::app);
+    std::ofstream file(fullPath, std::ios::app);
 
     while(true){
       std::unique_lock<std::mutex> lock1(queueMutex);
 
-      cv.wait(lock1, [this] {return !logQueue.empty() || !running; });
+      cv.wait(lock1, [] {return !logQueue.empty() || !running; });
 
       if (!running && logQueue.empty())
         break;
@@ -71,17 +76,13 @@ namespace Bobert {
 
   void Logger::Shutdown() {
     {
+      Info("Logger is closing");
       std::lock_guard<std::mutex> lock(queueMutex);
       running = false;
     }
     cv.notify_one();
     if (workerThread.joinable())
       workerThread.join();
-  }
-
-  Logger::~Logger() {
-    Info("Logger is closing");
-    Shutdown();
   }
 
   std::string_view Logger::GetLevelString(Level level) {

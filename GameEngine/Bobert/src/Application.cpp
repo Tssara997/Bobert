@@ -1,11 +1,10 @@
 #include "include/Application.h"
 
-// std::array<float, 4> Bobert::Application::backgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};
 bool Bobert::Application::windowShouldClose = Bobert::Application::defWindowShouldClose;
 
 namespace Bobert {
   Application::Application() : eventManager{} {
-    log.Init();
+    Logger::Init();
     InitEventSubscriptions();
     AddWindowBehaviour<WindowBehaviour>();
     backgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};
@@ -15,6 +14,7 @@ namespace Bobert {
     eventManager.Subscribe<KeyPressEvent>(KeyPressEvent::GetStaticType(), [this](const KeyPressEvent& e) {
       for (auto& winBeh : windowBehaviours)
         winBeh->OnKeyPress(e);
+      this->OnKeyPress(e);
     });
     eventManager.Subscribe<KeyReleaseEvent>(KeyReleaseEvent::GetStaticType(), [this](const KeyReleaseEvent& e) {
       for (auto& winBeh : windowBehaviours)
@@ -33,16 +33,13 @@ namespace Bobert {
 
   void Application::Run() {
 
-    log.Info("Engine is working");
-    log.Info("Logger is working");
-
     if (!glfwInit()) {
-        log.Error("Failed to initialize GLFW");
-        log.Info("Engine is closing");
+        Logger::Error("Failed to initialize GLFW");
+        Logger::Info("Engine is closing");
         return;
     }
 
-    log.Info("Initialization GLFW succsefull");
+    Logger::Info("Initialization GLFW succsefull");
 
 
     // // Konfiguracja wersji OpenGL (np. Core Profile 3.3)
@@ -52,25 +49,25 @@ namespace Bobert {
 
     GLFWwindow* window = glfwCreateWindow(800, 600, "Bobert Engine - Test", nullptr, nullptr);
     if (!window) {
-        log.Error("Failed to create a GLFW window");
+        Logger::Error("Failed to create a GLFW window");
         glfwTerminate();
-        log.Info("Terminated GLFW");
-        log.Info("Engine is closing");
+        Logger::Info("Terminated GLFW");
+        Logger::Info("Engine is closing");
         return;
     }
-    log.Info("Created a GLFW window");
+    Logger::Info("Created a GLFW window");
     glfwSetWindowUserPointer(window, this);
 
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
-        log.Error("Failed to initialize GLAD");
+        Logger::Error("Failed to initialize GLAD");
         ShutDown(window);
-        log.Info("Engine is closing");
+        Logger::Info("Engine is closing");
         return;
     }
 
-    log.Info("Initialization GLAD succsefull");
+    Logger::Info("Initialization GLAD succsefull");
 
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -83,8 +80,8 @@ namespace Bobert {
         glfwSwapBuffers(window);
         Update();
     }
+
     ShutDown(window);
-    log.Info("Engine is closing");
   }
 
   void Application::Update() {
@@ -114,11 +111,18 @@ namespace Bobert {
     app->eventManager.TriggerEvent(MouseEvent(button));
   }
 
+  void Application::OnKeyPress(const KeyPressEvent& e) {
+    if (e.GetKey() == 256)
+      windowShouldClose = true;
+  }
+
   void Application::ShutDown(GLFWwindow* window) {
+    Logger::Info("Engine is closing");
     glfwDestroyWindow(window);
-    log.Info("Destroyed window");
+    Logger::Info("Destroyed window");
     glfwTerminate();
-    log.Info("Terminated GLFW");
+    Logger::Info("Terminated GLFW");
+    Logger::Shutdown();
   }
 };
 
