@@ -8,4 +8,6 @@
 // ----------------------------------------------
 
 // temp
-#include "include/Event.h"
+#include "include/Event/Event.h"
+#include "include/Event/KeyEvent.h"
+#include "include/Event/MouseEvent.h"
