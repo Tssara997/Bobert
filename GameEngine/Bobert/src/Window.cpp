@@ -1,14 +1,15 @@
 #include "include/Window.h"
 
 namespace Bobert {
-  Window::Window(int width, int height, EventManager* eventManager) : m_width{m_width}, m_height{m_height}, m_eventManager{eventManager} {
+  Window::Window(int width, int height, EventManager* eventManager) : m_width{m_width}, m_height{m_height} {
+    m_eventManager = std::make_unique<EventManager>(eventManager);
     m_backgroundColor =  {0.1f, 0.1f, 0.15f, 1.0f};
   }
 
 
   bool Window::Init() {
     m_window = glfwCreateWindow(800, 600, "Okno z Window", nullptr, nullptr);
-    Logger::Info("WINDOW");
+
     if (!m_window) {
       Logger::Error("Failed to create a GLFW window");
       ShutDown();
@@ -84,5 +85,20 @@ namespace Bobert {
 
   const bool Window::WindowShouldClose() const {
     return m_windowShouldClose;
+  }
+
+
+  void Window::ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a) {
+    m_backgroundColor = {r, b, g, a};
+  }
+
+
+  void Window::ChangeBackgroundColor(const std::array<float, 4>& backgroundColor) {
+    m_backgroundColor = backgroundColor;
+  }
+
+
+  Window* Window::GetWindow() {
+    return this;
   }
 };

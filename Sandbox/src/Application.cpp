@@ -22,13 +22,14 @@ class Window : public Bobert::WindowBehaviour {
 class SandBoxApp : public Bobert::Application {
 public:
     SandBoxApp() {
-        AddWindowBehaviour<WindowColor>();
-        AddWindowBehaviour<Window>();
+        Bobert::Window& mainWindow = GetWindow();
+        AddBehaviour<WindowColor>()->SetWindow(mainWindow);
+        AddBehaviour<Window>()->SetWindow(mainWindow);
+
     }
     ~SandBoxApp() {}
 
 private:
-    // Window* window;
 
 };
 

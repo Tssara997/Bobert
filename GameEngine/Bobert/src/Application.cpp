@@ -5,21 +5,21 @@ namespace Bobert {
   Application::Application() : m_eventManager{}, m_window{800, 600, &m_eventManager} {
     Logger::Init();
     InitEventSubscriptions();
-    AddWindowBehaviour<WindowBehaviour>();
   }
 
 
   void Application::InitEventSubscriptions() {
     m_eventManager.Subscribe<KeyPressEvent>(KeyPressEvent::GetStaticType(), [this](const KeyPressEvent& e) {
-      for (auto& winBeh : m_windowBehaviours)
+      for (auto& winBeh : m_behaviours)
         winBeh->OnKeyPress(e);
+      m_window.OnKeyPress(e);
     });
     m_eventManager.Subscribe<KeyReleaseEvent>(KeyReleaseEvent::GetStaticType(), [this](const KeyReleaseEvent& e) {
-      for (auto& winBeh : m_windowBehaviours)
+      for (auto& winBeh : m_behaviours)
         winBeh->OnKeyRelease(e);
     });
     m_eventManager.Subscribe<MouseEvent>(MouseEvent::GetStaticType(), [this](const MouseEvent& e) {
-      for (auto& winBeh : m_windowBehaviours)
+      for (auto& winBeh : m_behaviours)
         winBeh->OnMouse(e);
     });
   }
@@ -57,6 +57,8 @@ namespace Bobert {
     while(!m_window.WindowShouldClose()) {
       m_window.Update();
     }
+
+    ShutDown();
   }
 
 
@@ -71,6 +73,11 @@ namespace Bobert {
     glfwTerminate();
     Logger::Info("Terminated GLFW");
     Logger::Shutdown();
+  }
+
+
+  Window& Application::GetWindow() {
+    return m_window;
   }
 };
 

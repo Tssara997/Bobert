@@ -15,21 +15,21 @@ namespace Bobert {
       virtual ~Application();
 
       template <typename B>
-      B* AddWindowBehaviour() {
+      B* AddBehaviour() {
         auto behaviour = std::make_unique<B>();
         B* raw_ptr = behaviour.get();
-        m_windowBehaviours.push_back(std::move(behaviour));
+        m_behaviours.push_back(std::move(behaviour));
         return raw_ptr;
       }
 
+      Window& GetWindow();
+
       void Run();
     
-    protected:
-      std::vector<std::unique_ptr<WindowBehaviour>> m_windowBehaviours; // behaviours
-      EventManager m_eventManager;
-      
     private:
+      EventManager m_eventManager;
       Window m_window;
+      std::vector<std::unique_ptr<WindowBehaviour>> m_behaviours;
 
       void InitEventSubscriptions();
       void Update();
