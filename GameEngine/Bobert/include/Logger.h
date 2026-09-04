@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "pch.h"
 
 namespace Bobert {
   class Bobert_API Logger {

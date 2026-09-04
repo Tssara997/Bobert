@@ -1,8 +1,7 @@
 #include "include/Window.h"
 
 namespace Bobert {
-  Window::Window(int width, int height, EventManager* eventManager) : m_width{m_width}, m_height{m_height} {
-    m_eventManager = std::make_unique<EventManager>(eventManager);
+  Window::Window(int width, int height, EventManager* eventManager) : m_width{m_width}, m_height{m_height}, m_eventManager{eventManager} {
     m_backgroundColor =  {0.1f, 0.1f, 0.15f, 1.0f};
   }
 

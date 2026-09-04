@@ -23,8 +23,8 @@ class SandBoxApp : public Bobert::Application {
 public:
     SandBoxApp() {
         Bobert::Window& mainWindow = GetWindow();
-        AddBehaviour<WindowColor>()->SetWindow(mainWindow);
-        AddBehaviour<Window>()->SetWindow(mainWindow);
+        AddBehaviour<WindowColor>()->SetWindow(&mainWindow);
+        AddBehaviour<Window>()->SetWindow(&mainWindow);
 
     }
     ~SandBoxApp() {}

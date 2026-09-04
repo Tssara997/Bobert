@@ -1,23 +1,4 @@
 #pragma once
-#include <iostream>
-#include <fstream>
-#include <filesystem>
-#include <chrono>
-#include <iomanip>
-#include <queue>
-#include <mutex>
-#include <string>
-#include <format>
-#include <atomic>
-#include <condition_variable>
-#include <thread>
-#include <array>
-#include <map>
-#include <functional>
-#include <vector>
-
-#include <glad/gl.h>
-#include <GLFW/glfw3.h>
 
 #ifdef BB_PLATFORM_WINDOWS
   #ifdef BB_BUILD_DLL

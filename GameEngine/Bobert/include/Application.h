@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "pch.h"
 #include "Logger.h"
 #include "WindowBehaviour.h"
 #include "Event/EventManager.h"

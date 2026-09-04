@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "pch.h"
 #include "Logger.h"
 #include "Event/EventManager.h"
 #include "Event/KeyEvent.h"
@@ -18,14 +19,6 @@ namespace Bobert {
     void Update();
     void ShutDown();
 
-    // template <typename B>
-    // B* SetBehaviour() {
-    //   auto behaviour = std::make_unique<B>();
-    //   behaviour->SetWindow(this);
-    //   // B* raw_ptr = behaviour.get();
-    //   // return raw_ptr;
-    // }
-
     Window* GetWindow();
     const int GetWidth() const;
     const int GetHeight() const;
@@ -40,7 +33,7 @@ namespace Bobert {
      int m_height;
      bool m_windowShouldClose = false;
      GLFWwindow* m_window;
-     std::unique_ptr<EventManager> m_eventManager;
+     EventManager* m_eventManager;
 
      std::array<float, 4> m_backgroundColor;
 
