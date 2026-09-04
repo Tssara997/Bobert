@@ -38,6 +38,7 @@ FetchContent_MakeAvailable(glfw)
 add_library(Bobert SHARED
     Bobert/src/Application.cpp
     Bobert/src/Logger.cpp
+    Bobert/src/Window.cpp
     deps/glad/src/gl.c
 )
 

@@ -5,6 +5,7 @@
 #include "Event/EventManager.h"
 #include "Event/KeyEvent.h"
 #include "Event/MouseEvent.h"
+#include "Window.h"
 
 namespace Bobert {
   class Bobert_API Application {
@@ -17,31 +18,23 @@ namespace Bobert {
       B* AddWindowBehaviour() {
         auto behaviour = std::make_unique<B>();
         B* raw_ptr = behaviour.get();
-        windowBehaviours.push_back(std::move(behaviour));
+        m_windowBehaviours.push_back(std::move(behaviour));
         return raw_ptr;
       }
 
       void Run();
     
     protected:
-      std::vector<std::unique_ptr<WindowBehaviour>> windowBehaviours;
-      EventManager eventManager;
+      std::vector<std::unique_ptr<WindowBehaviour>> m_windowBehaviours; // behaviours
+      EventManager m_eventManager;
       
     private:
-      static constexpr bool defWindowShouldClose = false;
-      static bool windowShouldClose;
-      std::array<float, 4> backgroundColor;
+      Window m_window;
 
       void InitEventSubscriptions();
       void Update();
-      void OnKeyPress(const KeyPressEvent& e);
-      static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods); // TEMP
-      static void mouse_button_callback(GLFWwindow* window, int button, int action, int mode); // TEMP
-      // static void window_should_close_callback(); // TEMP
 
-      void ShutDown(GLFWwindow* window);
+      void ShutDown();
   };
-
-  // To be defined in CLIENT
   Application* CreateApplication();
 };
