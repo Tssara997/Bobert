@@ -22,6 +22,8 @@ namespace Bobert {
 
     glfwSetKeyCallback(m_window, key_callback);
     glfwSetMouseButtonCallback(m_window, mouse_button_callback);
+    glfwSetCursorPosCallback(m_window, cursor_position_callback);
+    glfwSetCursorEnterCallback(m_window, cursor_enter_callback);
     glfwSetWindowCloseCallback(m_window, window_should_close_callback);
     return true;
   }
@@ -41,13 +43,6 @@ namespace Bobert {
   }
 
 
-  void Window::window_should_close_callback(GLFWwindow* window) {
-    Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
-    app->m_windowShouldClose = true;
-  }
-
-
   void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
@@ -59,10 +54,30 @@ namespace Bobert {
 
 
   void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mode) {
-    if (action != GLFW_PRESS)
-      return;
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->m_eventManager->TriggerEvent(MouseEvent(button));
+    if (action == GLFW_RELEASE)
+      app->m_eventManager->TriggerEvent(MouseReleaseEvent(button));
+    else
+      app->m_eventManager->TriggerEvent(MousePressEvent(button, action == GLFW_REPEAT));
+  }
+
+
+  void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+    Window*app = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    app->m_eventManager->TriggerEvent(MousePositionEvent(xpos, ypos));
+  }
+
+
+  void Window::cursor_enter_callback(GLFWwindow* window, int entered) {
+    Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    app->m_eventManager->TriggerEvent(MouseEnterEvent(entered == 1));
+  }
+
+
+  void Window::window_should_close_callback(GLFWwindow* window) {
+    Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    glfwSetWindowShouldClose(window, GLFW_TRUE);
+    app->m_windowShouldClose = true;
   }
 
 

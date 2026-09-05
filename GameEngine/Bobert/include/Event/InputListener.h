@@ -13,6 +13,9 @@ namespace Bobert {
       virtual void OnKeyRelease(const KeyReleaseEvent& e) {};
 
     // Mouse
-      virtual void OnMouse(const MouseEvent& e) {};
+      virtual void OnMousePress(const MousePressEvent& e) {};
+      virtual void OnMouseRelease(const MouseReleaseEvent& e) {};
+      virtual void OnMousePosition(const MousePositionEvent& e) {};
+      virtual void OnMouseEnter(const MouseEnterEvent& e) {};
   };
 }

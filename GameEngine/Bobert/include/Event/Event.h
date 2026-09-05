@@ -5,7 +5,7 @@ namespace Bobert {
     enum EventTypeEnum {
         None = 0,
         KeyInput, KeyPressInput, KeyReleaseInput,
-        MouseInput,
+        MouseEnterInput, MousePositionInput, MouseInput, MousePressInput, MouseReleaseInput,
         Count
     };
 
@@ -14,7 +14,7 @@ namespace Bobert {
         public:
             virtual const EventTypeEnum GetEventType() const = 0;
         protected:
-            bool handled {false};
+            bool m_handled {false};
         
     };
 };

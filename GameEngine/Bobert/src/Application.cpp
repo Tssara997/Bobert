@@ -18,9 +18,21 @@ namespace Bobert {
       for (auto& winBeh : m_behaviours)
         winBeh->OnKeyRelease(e);
     });
-    m_eventManager.Subscribe<MouseEvent>(MouseEvent::GetStaticType(), [this](const MouseEvent& e) {
+    m_eventManager.Subscribe<MousePressEvent>(MousePressEvent::GetStaticType(), [this](const MousePressEvent& e) {
       for (auto& winBeh : m_behaviours)
-        winBeh->OnMouse(e);
+        winBeh->OnMousePress(e);
+    });
+    m_eventManager.Subscribe<MouseReleaseEvent>(MouseReleaseEvent::GetStaticType(), [this](const MouseReleaseEvent& e) {
+      for (auto& winBeh : m_behaviours)
+        winBeh->OnMouseRelease(e);
+    });
+    m_eventManager.Subscribe<MousePositionEvent>(MousePositionEvent::GetStaticType(), [this](const MousePositionEvent& e) {
+      for (auto& winBeh : m_behaviours)
+        winBeh->OnMousePosition(e);
+    });
+    m_eventManager.Subscribe<MouseEnterEvent>(MouseEnterEvent::GetStaticType(), [this](const MouseEnterEvent& e) {
+      for (auto& winBeh : m_behaviours)
+        winBeh->OnMouseEnter(e);
     });
   }
 

@@ -4,18 +4,25 @@
 class WindowColor : public Bobert::WindowBehaviour {
     public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
-        if (e.GetKey() == 71) {
-            ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
-        }
+        ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
+    }
+
+    void OnMousePosition(const Bobert::MousePositionEvent& e) override {
+
+    }
+
+    void OnMouseEnter(const Bobert::MouseEnterEvent& e) override {
+        if (e.IsEnter())
+            std::cout << "Yey you are back :)" << std::endl;
+        else
+            std::cout << "Noooo, come back. Pretty please :(" << std::endl;
     }
 };
 
 class Window : public Bobert::WindowBehaviour {
     public:
         void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
-            if (e.GetKey() == 71) {
-                ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
-            }
+            ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
         }
 };
 
