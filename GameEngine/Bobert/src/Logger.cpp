@@ -37,28 +37,28 @@ namespace Bobert {
 
 
   void Logger::Info(const std::string& message) { 
-    Log(message, Level::INFO);
+    GetSingelton().Log(message, Level::INFO);
   }
 
 
 
   void Logger::Debug(const std::string& message) {
-    Log(message, Level::DEBUG);
+    GetSingelton().Log(message, Level::DEBUG);
   }
 
 
   void Logger::Warning(const std::string& message) {
-    Log(message, Level::WARNING);
+    GetSingelton().Log(message, Level::WARNING);
   }
 
 
   void Logger::Error(const std::string& message) {
-    Log(message, Level::ERROR);
+    GetSingelton().Log(message, Level::ERROR);
   }
 
 
   void Logger::Critical(const std::string& message) {
-    Log(message, Level::CRITICAL);
+    GetSingelton().Log(message, Level::CRITICAL);
   }
 
 

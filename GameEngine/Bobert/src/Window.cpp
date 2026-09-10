@@ -1,13 +1,18 @@
 #include "include/Window.h"
 
 namespace Bobert {
-  Window::Window(int width, int height, EventManager* eventManager) : m_width{m_width}, m_height{m_height}, m_eventManager{eventManager} {
+  Window::Window(int width, int height, const char* title, EventManager* eventManager) : m_width{m_width}, m_height{m_height}, m_title{title}, m_eventManager{eventManager} {
     m_backgroundColor =  {0.1f, 0.1f, 0.15f, 1.0f};
   }
 
 
+  Window::~Window() {
+    delete m_title;
+  }
+
+
   bool Window::Init() {
-    m_window = glfwCreateWindow(800, 600, "Okno z Window", nullptr, nullptr);
+    m_window = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
 
     if (!m_window) {
       Logger::Error("Failed to create a GLFW window");
@@ -34,6 +39,11 @@ namespace Bobert {
 
     glfwPollEvents();
     glfwSwapBuffers(m_window);
+  }
+
+
+  void Window::SetAsCurrent() {
+    glfwMakeContextCurrent(m_window);
   }
 
 
@@ -70,7 +80,7 @@ namespace Bobert {
 
   void Window::cursor_enter_callback(GLFWwindow* window, int entered) {
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->m_eventManager->TriggerEvent(MouseEnterEvent(entered == 1));
+    app->m_eventManager->TriggerEvent(MouseEnterEvent(entered == 1, *app));
   }
 
 
@@ -114,5 +124,27 @@ namespace Bobert {
 
   Window* Window::GetWindow() {
     return this;
+  }
+
+
+  Window::Window(const Window& other) {
+
+  }
+
+
+  Window& Window::operator=(const Window& other) {
+    if (this == &other)
+      return *this;
+  }
+
+
+  Window::Window(Window&& other) {
+
+  }
+
+
+  Window& Window::operator=(Window&& other) {
+    if (this == &other)
+      return *this;
   }
 };

@@ -16,7 +16,7 @@ set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(glfw)
 
-add_library(Glad STATIC deps/glad/src/gl.c)
+add_library(Glad STATIC deps/glad/src/glad.c)
 target_include_directories(Glad PUBLIC deps/glad/include)
 
 add_library(Bobert SHARED

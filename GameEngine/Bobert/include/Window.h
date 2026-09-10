@@ -12,11 +12,12 @@ namespace Bobert {
   class Bobert_API Window {
     public:
 
-    Window(int width, int height, EventManager* eventManager);
-    // ~Window();
+    Window(int width, int height, const char* title, EventManager* eventManager);
+    ~Window();
 
     bool Init();
     void Update();
+    void SetAsCurrent();
     void ShutDown();
 
     Window* GetWindow();
@@ -28,9 +29,15 @@ namespace Bobert {
     void ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a);
     void ChangeBackgroundColor(const std::array<float, 4>& backgroundColor);
 
+    Window(const Window& other);
+    Window& operator=(const Window& other);
+    Window(Window&& other);
+    Window& operator=(Window&& other);
+
     private:
      int m_width;
      int m_height;
+     const char* m_title;
      bool m_windowShouldClose = false;
      GLFWwindow* m_window;
      EventManager* m_eventManager;

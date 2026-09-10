@@ -24,18 +24,21 @@ namespace Bobert {
       }
 
       Window& GetWindow();
+      void CreateNewWindow(int width, int height, const char* title);
 
       void Run();
     
     private:
       EventManager m_eventManager;
-      Window m_window;
+      Window m_currentWindow;
+      std::vector<Window> m_windows;
       std::vector<std::unique_ptr<WindowBehaviour>> m_behaviours;
 
       void InitEventSubscriptions();
       void Update();
-
       void ShutDown();
+
+      void OnMouseEnter(const MouseEnterEvent& e);
   };
   Application* CreateApplication();
 };

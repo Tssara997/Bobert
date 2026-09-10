@@ -11,7 +11,17 @@ namespace Bobert {
       static void Init();
       static void Shutdown();
 
-      static void Log(const std::string& message, Level level = Level::INFO);
+      Logger(const Logger&) = delete;
+      Logger& operator=(const Logger&) = delete;
+      Logger(Logger&&) = delete;
+      Logger& operator=(Logger&&) = delete;
+
+      static Logger& GetSingelton() {
+        static Logger instance;
+        return instance;
+      }
+
+      void Log(const std::string& message, Level level = Level::INFO);
       static void Info(const std::string& message);
       static void Debug(const std::string& message);
       static void Warning(const std::string& message);
@@ -19,7 +29,7 @@ namespace Bobert {
       static void Critical(const std::string& message);
 
     private:
-      Logger() = delete;
+      Logger() = default;
 
       inline static std::chrono::system_clock::time_point TimeStart = std::chrono::system_clock::now();
       static constexpr std::string_view LoggerName = "Bobert_logger";
