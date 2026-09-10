@@ -1,7 +1,7 @@
 #include <Bobert.h>
 #include <iostream>
 
-class WindowColor : public Bobert::WindowBehaviour {
+class WindowColorGreen : public Bobert::WindowBehaviour {
     public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
         ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
@@ -19,6 +19,13 @@ class WindowColor : public Bobert::WindowBehaviour {
     }
 };
 
+class WindowColorRed : public Bobert::WindowBehaviour {
+    public:
+    void OnKeyPress(const Bobert::KeyPressEvent& e) override {
+        ChangeBackgroundColor(1.0f, 0.5f, 0.0f, 1.0f);
+    }
+};
+
 class Window : public Bobert::WindowBehaviour {
     public:
         void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
@@ -29,11 +36,21 @@ class Window : public Bobert::WindowBehaviour {
 class SandBoxApp : public Bobert::Application {
 public:
     SandBoxApp() {
-        Bobert::Window& mainWindow = GetWindow();
-        AddBehaviour<WindowColor>()->SetWindow(&mainWindow);
-        AddBehaviour<Window>()->SetWindow(&mainWindow);
-
     }
+
+    void Start() override {
+        Bobert::Window* mainWindow = GetWindow();
+        AddBehaviour<WindowColorGreen>()->SetWindow(*mainWindow);
+        AddBehaviour<Window>()->SetWindow(*mainWindow);
+
+        CreateNewWindow(800, 600, "Red window");
+        Bobert::Window* secondWindow = GetWindow();
+        if (secondWindow){
+            AddBehaviour<WindowColorRed>()->SetWindow(*secondWindow);
+            AddBehaviour<Window>()->SetWindow(*secondWindow);
+        }
+    }
+
     ~SandBoxApp() {}
 
 private:

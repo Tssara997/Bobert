@@ -9,11 +9,12 @@ namespace Bobert {
         public:
             WindowBehaviour() { }
 
-            void SetWindow(Window* window) {m_window = window;}
+            void SetWindow(Window& window) {m_window = &window;}
 
             void ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a) {
                 if (m_window)
                     m_window->ChangeBackgroundColor(r, b, g, a);
+
             }
             void ChangeBackgroundColor(const std::array<float, 4>& backgroundColor) {
                 if (m_window)

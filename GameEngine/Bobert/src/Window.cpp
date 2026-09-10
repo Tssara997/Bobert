@@ -1,17 +1,27 @@
 #include "include/Window.h"
 
 namespace Bobert {
-  Window::Window(int width, int height, const char* title, EventManager* eventManager) : m_width{m_width}, m_height{m_height}, m_title{title}, m_eventManager{eventManager} {
+  Window::Window(int width, int height, const char* title, EventManager* eventManager) : m_width{width}, m_height{height}, m_title{title}, m_eventManager{eventManager} {
     m_backgroundColor =  {0.1f, 0.1f, 0.15f, 1.0f};
   }
 
 
   Window::~Window() {
-    delete m_title;
+    ShutDown();
   }
 
 
   bool Window::Init() {
+    if (m_title == nullptr) {
+      Logger::Info("Init of empty Window");
+    }
+    else {
+      std::string title = m_title;
+      Logger::Info(title);
+      Logger::Info(std::to_string(m_width));
+      Logger::Info(std::to_string(m_height));
+    }
+
     m_window = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
 
     if (!m_window) {
@@ -34,6 +44,7 @@ namespace Bobert {
   }
 
   void Window::Update() {
+    glfwMakeContextCurrent(m_window);
     glClearColor(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -127,24 +138,59 @@ namespace Bobert {
   }
 
 
-  Window::Window(const Window& other) {
+  Window::Window(Window&& other) noexcept : m_width(other.m_width), m_height(other.m_height), m_title(other.m_title),
+    m_windowShouldClose(other.m_windowShouldClose), m_window(other.m_window), m_eventManager(other.m_eventManager) {
 
+    m_backgroundColor = std::move(other.m_backgroundColor);
+
+    other.m_width = 0;
+    other.m_height = 0;
+    other.m_title = nullptr;
+    other.m_windowShouldClose = false;
+    other.m_window = nullptr;
+    other.m_eventManager = nullptr;
+    other.m_backgroundColor = {};
+
+    if (m_window)
+      glfwSetWindowUserPointer(m_window, this);
   }
 
 
-  Window& Window::operator=(const Window& other) {
+  Window& Window::operator=(Window&& other) noexcept {
     if (this == &other)
       return *this;
+
+    if(m_window)
+      glfwDestroyWindow(m_window);
+
+    m_width = other.m_width;
+    m_height = other.m_height;
+    m_title = other.m_title;
+    m_windowShouldClose = other.m_windowShouldClose;
+    m_window = other.m_window;
+    m_eventManager = other.m_eventManager;
+    m_backgroundColor = std::move(other.m_backgroundColor);
+
+    other.m_width = 0;
+    other.m_height = 0;
+    other.m_title = nullptr;
+    other.m_windowShouldClose = false;
+    other.m_window = nullptr;
+    other.m_eventManager = nullptr;
+    other.m_backgroundColor = {};
+
+    if (m_window)
+      glfwSetWindowUserPointer(m_window, this);
+
+    return *this;
   }
 
 
-  Window::Window(Window&& other) {
-
+  bool Window::operator==(const Window& other) const {
+    return m_window == other.m_window;
   }
 
-
-  Window& Window::operator=(Window&& other) {
-    if (this == &other)
-      return *this;
+  bool Window::operator==(const GLFWwindow* other) const {
+    return m_window == other;
   }
 };

@@ -1,6 +1,5 @@
 #pragma once 
 #include "Event.h"
-#include "include/Window.h"
 
 namespace Bobert {
     class MousePositionEvent : public Event {
@@ -19,18 +18,21 @@ namespace Bobert {
     };
 
 
+    class Window;
+
+
     class MouseEnterEvent : public Event {
         public:
-            MouseEnterEvent(bool isEnter, Window& window) : m_isEnter{isEnter}, m_window{window} {}
+            MouseEnterEvent(bool isEnter, Window& window);
 
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::MouseEnterInput;}
             static const EventTypeEnum GetStaticType() {return EventTypeEnum::MouseEnterInput;}
 
             const bool IsEnter() const {return m_isEnter;}
-            const Window& GetWindow() const {return m_window;}
+            const Window& GetWindow() const;
         private:
             bool m_isEnter;
-            Window m_window;
+            Window* m_window;
     };
 
 

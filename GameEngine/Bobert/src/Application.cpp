@@ -2,7 +2,7 @@
 
 namespace Bobert {
 
-  Application::Application() : m_eventManager{}, m_currentWindow{800, 600, "Main Window", &m_eventManager} {
+  Application::Application() : m_eventManager{}, m_currentWindow(800, 600, "WHSAAAT", &m_eventManager) {
     Logger::Init();
     InitEventSubscriptions();
   }
@@ -12,7 +12,6 @@ namespace Bobert {
     m_eventManager.Subscribe<KeyPressEvent>(KeyPressEvent::GetStaticType(), [this](const KeyPressEvent& e) {
       for (auto& winBeh : m_behaviours)
         winBeh->OnKeyPress(e);
-      m_currentWindow.OnKeyPress(e);
     });
     m_eventManager.Subscribe<KeyReleaseEvent>(KeyReleaseEvent::GetStaticType(), [this](const KeyReleaseEvent& e) {
       for (auto& winBeh : m_behaviours)
@@ -53,24 +52,21 @@ namespace Bobert {
 
     Logger::Info("Initialization GLFW succseful");
 
+    CreateNewWindow(800, 600, "Main Window");
+    Start();
+
+    m_windows.front().SetAsCurrent();
+
     if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
         Logger::Error("Failed to initialize GLAD");
         Logger::Info("Engine is closing");
         return;
     }
 
-    if (!m_currentWindow.Init()) {
-        glfwTerminate();
-        Logger::Info("Terminated GLFW");
-        return;
-      }
-
     Logger::Info("Initialization GLAD succseful");
 
-    bool shouldClose = false;
-
-    while(!m_currentWindow.WindowShouldClose() && m_windows.size() <= 1) {
-      m_currentWindow.Update();
+    while(!AppShouldClose()) {
+      Update();
     }
 
     ShutDown();
@@ -78,7 +74,17 @@ namespace Bobert {
 
 
   void Application::Update() {
-    return;
+    for (size_t i{m_windows.size()}; i > 0; --i) {
+      if (m_windows[i - 1].WindowShouldClose()) {
+        m_windows.erase(m_windows.begin() + (i - 1));
+      }
+    }
+
+    GLFWwindow* active_window = glfwGetCurrentContext();
+    for (auto& window : m_windows) {
+      window.Update();
+    }
+
   }
 
 
@@ -86,6 +92,7 @@ namespace Bobert {
     for (Window& window : m_windows) {
       window.ShutDown();
     }
+
     Logger::Info("Engine is closing");
     glfwTerminate();
     Logger::Info("Terminated GLFW");
@@ -93,26 +100,34 @@ namespace Bobert {
   }
 
 
-  Window& Application::GetWindow() {
-    return m_currentWindow;
+  Window* Application::GetWindow() {
+    return &m_windows.front();
   }
 
 
-  void Application::CreateNewWindow(int width, int height, const char* title) {
+  Window* Application::CreateNewWindow(int width, int height, const char* title) {
     Window window(width, height, title, &m_eventManager);
       if (!window.Init()) {
         glfwTerminate();
         Logger::Info("Terminated GLFW");
-        return;
+        return nullptr;
       }
     m_windows.push_back(std::move(window));
-    m_currentWindow = std::move(window);
+    return &m_windows.back();
   }
 
 
   void Application::OnMouseEnter(const MouseEnterEvent& e) {
-    if (e.IsEnter())
-      m_currentWindow = e.GetWindow();
+
+  }
+
+
+  const bool Application::AppShouldClose() const {
+    for (const auto& window : m_windows)
+      if (!window.WindowShouldClose())
+        return false;
+
+    return true;
   }
 };
 

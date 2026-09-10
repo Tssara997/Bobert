@@ -15,6 +15,8 @@ namespace Bobert {
       Application();
       virtual ~Application();
 
+      virtual void Start() {};
+
       template <typename B>
       B* AddBehaviour() {
         auto behaviour = std::make_unique<B>();
@@ -23,8 +25,8 @@ namespace Bobert {
         return raw_ptr;
       }
 
-      Window& GetWindow();
-      void CreateNewWindow(int width, int height, const char* title);
+      Window* GetWindow();
+      Window* CreateNewWindow(int width, int height, const char* title);
 
       void Run();
     
@@ -39,6 +41,8 @@ namespace Bobert {
       void ShutDown();
 
       void OnMouseEnter(const MouseEnterEvent& e);
+
+      const bool AppShouldClose() const;
   };
   Application* CreateApplication();
 };

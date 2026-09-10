@@ -21,6 +21,7 @@ namespace Bobert {
     void ShutDown();
 
     Window* GetWindow();
+
     const int GetWidth() const;
     const int GetHeight() const;
     const bool WindowShouldClose() const;
@@ -29,10 +30,12 @@ namespace Bobert {
     void ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a);
     void ChangeBackgroundColor(const std::array<float, 4>& backgroundColor);
 
-    Window(const Window& other);
-    Window& operator=(const Window& other);
-    Window(Window&& other);
-    Window& operator=(Window&& other);
+    Window(const Window& other) = delete;
+    Window& operator=(const Window& other) = delete;
+    Window(Window&& other) noexcept;
+    Window& operator=(Window&& other) noexcept;
+    bool operator==(const Window& other) const;
+    bool operator==(const GLFWwindow* other) const;
 
     private:
      int m_width;

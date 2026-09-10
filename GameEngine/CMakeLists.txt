@@ -23,6 +23,7 @@ add_library(Bobert SHARED
     Bobert/src/Application.cpp
     Bobert/src/Logger.cpp
     Bobert/src/Window.cpp
+    Bobert/src/MouseEvent.cpp
 )
 
 target_link_libraries(Bobert PUBLIC glfw Glad)
