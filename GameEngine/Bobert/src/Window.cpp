@@ -7,19 +7,14 @@ namespace Bobert {
 
 
   Window::~Window() {
-    ShutDown();
+    if (m_window)
+      ShutDown();
   }
 
 
   bool Window::Init() {
     if (m_title == nullptr) {
       Logger::Info("Init of empty Window");
-    }
-    else {
-      std::string title = m_title;
-      Logger::Info(title);
-      Logger::Info(std::to_string(m_width));
-      Logger::Info(std::to_string(m_height));
     }
 
     m_window = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
@@ -65,31 +60,43 @@ namespace Bobert {
 
 
   void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (!glfwGetWindowAttrib(window, GLFW_FOCUSED))
+      return;
+
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
     if (action == GLFW_RELEASE)
-      app->m_eventManager->TriggerEvent(KeyReleaseEvent(key));
+      app->m_eventManager->TriggerEvent(KeyReleaseEvent(key, *app));
     else
-      app->m_eventManager->TriggerEvent(KeyPressEvent(key, action == GLFW_REPEAT));
+      app->m_eventManager->TriggerEvent(KeyPressEvent(key, action == GLFW_REPEAT, *app));
   }
 
 
   void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mode) {
+    if (!glfwGetWindowAttrib(window, GLFW_FOCUSED))
+      return;
+
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
     if (action == GLFW_RELEASE)
-      app->m_eventManager->TriggerEvent(MouseReleaseEvent(button));
+      app->m_eventManager->TriggerEvent(MouseReleaseEvent(button, *app));
     else
-      app->m_eventManager->TriggerEvent(MousePressEvent(button, action == GLFW_REPEAT));
+      app->m_eventManager->TriggerEvent(MousePressEvent(button, action == GLFW_REPEAT, *app));
   }
 
 
   void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (!glfwGetWindowAttrib(window, GLFW_FOCUSED))
+      return;
+
     Window*app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->m_eventManager->TriggerEvent(MousePositionEvent(xpos, ypos));
+    app->m_eventManager->TriggerEvent(MousePositionEvent(xpos, ypos, *app));
   }
 
 
   void Window::cursor_enter_callback(GLFWwindow* window, int entered) {
+    if (!glfwGetWindowAttrib(window, GLFW_FOCUSED))
+      return;
+
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
     app->m_eventManager->TriggerEvent(MouseEnterEvent(entered == 1, *app));
   }
@@ -102,10 +109,7 @@ namespace Bobert {
   }
 
 
-  void Window::OnKeyPress(const KeyPressEvent& e) {
-    if (e.GetKey() == 256)
-      m_windowShouldClose = true;
-  }
+  // void Window::window_focus_callback(GLFWwindow* window, int focus)
 
 
   const int Window::GetWidth() const {
@@ -118,8 +122,18 @@ namespace Bobert {
   }
 
 
+  const std::string Window::GetTitle() const {
+    std::string title = m_title;
+    return title;
+  }
+
   const bool Window::WindowShouldClose() const {
     return m_windowShouldClose;
+  }
+
+
+  void Window::Close() {
+    m_windowShouldClose = true;
   }
 
 

@@ -6,7 +6,6 @@
 #include "Event/EventManager.h"
 #include "Event/KeyEvent.h"
 #include "Event/MouseEvent.h"
-// #include "WindowBehaviour.h"
 
 namespace Bobert {
   class Bobert_API Window {
@@ -24,9 +23,10 @@ namespace Bobert {
 
     const int GetWidth() const;
     const int GetHeight() const;
+    const std::string GetTitle() const;
     const bool WindowShouldClose() const;
 
-    void OnKeyPress(const KeyPressEvent& e);
+    void Close();
     void ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a);
     void ChangeBackgroundColor(const std::array<float, 4>& backgroundColor);
 
@@ -44,6 +44,7 @@ namespace Bobert {
      bool m_windowShouldClose = false;
      GLFWwindow* m_window;
      EventManager* m_eventManager;
+     bool isOnFocus = false;
 
      std::array<float, 4> m_backgroundColor;
 
@@ -52,5 +53,6 @@ namespace Bobert {
      static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
      static void cursor_enter_callback(GLFWwindow* window, int entered);
      static void window_should_close_callback(GLFWwindow* window);
+    //  static void window_focus_callback(GLFWwindow* window, int focus);
   };
 };

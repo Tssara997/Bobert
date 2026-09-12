@@ -2,7 +2,7 @@
 #include "Event.h"
 
 namespace Bobert {
-  class KeyEvent : public Event 
+  class KeyEvent : public UserEvent
     {
         public:
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyInput;}
@@ -11,7 +11,7 @@ namespace Bobert {
             const int GetKey() const {return m_key;}
 
         protected:
-            KeyEvent(int key) : m_key{key} {}
+            KeyEvent(int key, Window& window) : UserEvent(window), m_key{key} {}
             int m_key;
 
     };
@@ -19,7 +19,7 @@ namespace Bobert {
   class KeyPressEvent : public KeyEvent
     {
       public:
-        KeyPressEvent(int key, bool isRepeat) : KeyEvent(key), m_isRepeat{isRepeat} {}
+        KeyPressEvent(int key, bool isRepeat, Window& window) : KeyEvent(key, window), m_isRepeat{isRepeat} {}
 
         const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyPressInput;}
         static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyPressInput;}
@@ -32,7 +32,7 @@ namespace Bobert {
   class KeyReleaseEvent : public KeyEvent
   {
     public:
-      KeyReleaseEvent(int key) : KeyEvent(key) {}
+      KeyReleaseEvent(int key, Window& window) : KeyEvent(key, window) {}
 
       const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyReleaseInput;}
       static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyReleaseInput;}

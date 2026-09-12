@@ -7,6 +7,7 @@
 #include "Event/KeyEvent.h"
 #include "Event/MouseEvent.h"
 #include "Window.h"
+#include "DefaultWindowBehaviour.h"
 
 namespace Bobert {
   class Bobert_API Application {
@@ -25,6 +26,9 @@ namespace Bobert {
         return raw_ptr;
       }
 
+      template <typename EventType>
+      void Subscribe(void (WindowBehaviour::*memberFunc)(const EventType&));
+
       Window* GetWindow();
       Window* CreateNewWindow(int width, int height, const char* title);
 
@@ -33,14 +37,12 @@ namespace Bobert {
     private:
       EventManager m_eventManager;
       Window m_currentWindow;
-      std::vector<Window> m_windows;
+      std::vector<std::unique_ptr<Window>> m_windows;
       std::vector<std::unique_ptr<WindowBehaviour>> m_behaviours;
 
       void InitEventSubscriptions();
       void Update();
       void ShutDown();
-
-      void OnMouseEnter(const MouseEnterEvent& e);
 
       const bool AppShouldClose() const;
   };

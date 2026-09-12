@@ -7,10 +7,6 @@ class WindowColorGreen : public Bobert::WindowBehaviour {
         ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
     }
 
-    void OnMousePosition(const Bobert::MousePositionEvent& e) override {
-
-    }
-
     void OnMouseEnter(const Bobert::MouseEnterEvent& e) override {
         if (e.IsEnter())
             std::cout << "Yey you are back :)" << std::endl;
@@ -21,8 +17,25 @@ class WindowColorGreen : public Bobert::WindowBehaviour {
 
 class WindowColorRed : public Bobert::WindowBehaviour {
     public:
+    // void OnMousePress(const Bobert::MousePressEvent& e) override {
+    //     std::cout << "MOUSE" << std::endl;
+    //     ChangeBackgroundColor(1.0f, 0.5f, 0.0f, 1.0f);
+    // }
+
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
-        ChangeBackgroundColor(1.0f, 0.5f, 0.0f, 1.0f);
+        ChangeBackgroundColor(1.0f, 0.0f, 0.0f, 1.0f);
+    }
+};
+
+class WindowColorYellow : public Bobert::WindowBehaviour {
+    public:
+    // void OnMousePress(const Bobert::MousePressEvent& e) override {
+    //     std::cout << "MOUSE" << std::endl;
+    //     ChangeBackgroundColor(1.0f, 0.5f, 0.0f, 1.0f);
+    // }
+
+    void OnKeyPress(const Bobert::KeyPressEvent& e) override {
+        ChangeBackgroundColor(1.0f, 1.0f, 0.0f, 1.0f);
     }
 };
 
@@ -30,6 +43,10 @@ class Window : public Bobert::WindowBehaviour {
     public:
         void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
             ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
+        }
+
+        void OnMouseRelease(const Bobert::MouseReleaseEvent& e) override {
+           ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
         }
 };
 
@@ -43,11 +60,16 @@ public:
         AddBehaviour<WindowColorGreen>()->SetWindow(*mainWindow);
         AddBehaviour<Window>()->SetWindow(*mainWindow);
 
-        CreateNewWindow(800, 600, "Red window");
-        Bobert::Window* secondWindow = GetWindow();
-        if (secondWindow){
+        Bobert::Window* secondWindow = CreateNewWindow(800, 600, "Red window");;
+        if (secondWindow) {
             AddBehaviour<WindowColorRed>()->SetWindow(*secondWindow);
             AddBehaviour<Window>()->SetWindow(*secondWindow);
+        }
+
+        Bobert::Window* thirdWindow = CreateNewWindow(800, 600, "Yello window");;
+        if (secondWindow) {
+            AddBehaviour<WindowColorYellow>()->SetWindow(*thirdWindow);
+            AddBehaviour<Window>()->SetWindow(*thirdWindow);
         }
     }
 
