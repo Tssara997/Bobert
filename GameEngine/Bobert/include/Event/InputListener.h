@@ -1,6 +1,5 @@
 #pragma once
 
-#include "include\Core.h"
 #include "KeyEvent.h"
 #include "MouseEvent.h"
 #include "include\Logger.h"

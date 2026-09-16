@@ -1,8 +1,7 @@
 #pragma once
-#include "include\Core.h"
+
 #include "Event.h"
 #include "include\Logger.h"
-#include "include\pch.h"
 
 #include <functional>
 
