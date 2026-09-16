@@ -3,3 +3,4 @@ project(GameProject)
 
 add_subdirectory(GameEngine)
 add_subdirectory(Sandbox)
+add_subdirectory(Tools)
