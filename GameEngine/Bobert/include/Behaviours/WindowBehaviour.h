@@ -1,15 +1,12 @@
 #pragma once
-#include "Event\InputListener.h"
-#include "Window.h"
-#include "pch.h"
+
+#include "Behaviour.h"
 
 namespace Bobert {
 
-    class Bobert_API WindowBehaviour : public InputListener {
+    class Bobert_API WindowBehaviour : public Behaviour {
         public:
             WindowBehaviour() { }
-
-            void SetWindow(Window& window) {m_window = &window;}
 
 
             void ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a) {
@@ -24,12 +21,6 @@ namespace Bobert {
                     m_window->ChangeBackgroundColor(backgroundColor);
             }
 
-
-            const Window* GetWindow() const {return m_window;}
-
-
             const std::array<float, 4> defBackgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};
-        protected:
-            Window* m_window;
     };
 };
