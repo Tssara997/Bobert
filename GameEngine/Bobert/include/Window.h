@@ -3,6 +3,7 @@
 #include "Event/EventManager.h"
 #include "Event/KeyEvent.h"
 #include "Event/MouseEvent.h"
+#include "Event/WindowEvent.h"
 
 namespace Bobert {
   class Bobert_API Window {
@@ -50,6 +51,7 @@ namespace Bobert {
      static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
      static void cursor_enter_callback(GLFWwindow* window, int entered);
      static void window_should_close_callback(GLFWwindow* window);
-    //  static void window_focus_callback(GLFWwindow* window, int focus);
+     static void window_size_callback(GLFWwindow* window, int width, int height);
+     static void window_focus_callback(GLFWwindow* window, int focus);
   };
 };

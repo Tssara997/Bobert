@@ -35,6 +35,7 @@ namespace Bobert {
     glfwSetCursorPosCallback(m_window, cursor_position_callback);
     glfwSetCursorEnterCallback(m_window, cursor_enter_callback);
     glfwSetWindowCloseCallback(m_window, window_should_close_callback);
+    glfwSetWindowSizeCallback(m_window, window_size_callback);
     return true;
   }
 
@@ -105,11 +106,21 @@ namespace Bobert {
   void Window::window_should_close_callback(GLFWwindow* window) {
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
     glfwSetWindowShouldClose(window, GLFW_TRUE);
+    app->m_eventManager->TriggerEvent(WindowCloseEvent(*app));
     app->m_windowShouldClose = true;
   }
 
 
-  // void Window::window_focus_callback(GLFWwindow* window, int focus)
+  void Window::window_size_callback(GLFWwindow* window, int width, int height) {
+    Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    app->m_eventManager->TriggerEvent(WindowResizingEvent(width, height, *app));
+  }
+
+
+  void Window::window_focus_callback(GLFWwindow* window, int focus) {
+    Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    app->m_eventManager->TriggerEvent(WindowFocusEvent(*app));
+  }
 
 
   const int Window::GetWidth() const {
@@ -133,6 +144,7 @@ namespace Bobert {
 
 
   void Window::Close() {
+    m_eventManager->TriggerEvent(WindowCloseEvent(*this));
     m_windowShouldClose = true;
   }
 

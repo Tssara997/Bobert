@@ -15,6 +15,9 @@ namespace Bobert {
     Subscribe<MouseReleaseEvent>(&Behaviour::OnMouseRelease);
     Subscribe<MousePositionEvent>(&Behaviour::OnMousePosition);
     Subscribe<MouseEnterEvent>(&Behaviour::OnMouseEnter);
+    Subscribe<WindowCloseEvent>(&Behaviour::OnWindowClose);
+    Subscribe<WindowFocusEvent>(&Behaviour::OnWindowFocus);
+    Subscribe<WindowResizingEvent>(&Behaviour::OnWindowResize);
   }
 
 
@@ -69,7 +72,7 @@ namespace Bobert {
       if (m_windows[i - 1]->GetWindow() == nullptr || m_windows[i - 1]->WindowShouldClose()) {
 
         for (size_t j{m_behaviours.size()}; j > 0; --j) {
-          if (m_behaviours[j - 1]->GetWindow() == m_windows[i - 1].get())
+          if (m_behaviours[j - 1]->GetWindow() == nullptr || m_behaviours[j - 1]->GetWindow() == m_windows[i - 1].get())
             m_behaviours.erase(m_behaviours.begin() + (j - 1));
         }
 

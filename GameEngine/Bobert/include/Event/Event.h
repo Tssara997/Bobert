@@ -8,6 +8,7 @@ namespace Bobert {
         UserInput,
         KeyInput, KeyPressInput, KeyReleaseInput,
         MouseEnterInput, MousePositionInput, MouseInput, MousePressInput, MouseReleaseInput,
+        WindowInput, WindowResizingInput, WindowClosingInput, WindowFocusInput,
         Count
     };
 
