@@ -1,13 +1,7 @@
 #pragma once
-#include "Core.h"
-#include "pch.h"
-#include "Logger.h"
-#include "WindowBehaviour.h"
+
 #include "Event/EventManager.h"
-#include "Event/KeyEvent.h"
-#include "Event/MouseEvent.h"
-#include "Window.h"
-#include "DefaultWindowBehaviour.h"
+#include "Behaviours/DefaultWindowBehaviour.h"
 
 namespace Bobert {
   class Bobert_API Application {
@@ -27,7 +21,7 @@ namespace Bobert {
       }
 
       template <typename EventType>
-      void Subscribe(void (WindowBehaviour::*memberFunc)(const EventType&));
+      void Subscribe(void (Behaviour::*memberFunc)(const EventType&));
 
       Window* GetWindow();
       Window* CreateNewWindow(int width, int height, const char* title);
@@ -36,9 +30,8 @@ namespace Bobert {
     
     private:
       EventManager m_eventManager;
-      Window m_currentWindow;
       std::vector<std::unique_ptr<Window>> m_windows;
-      std::vector<std::unique_ptr<WindowBehaviour>> m_behaviours;
+      std::vector<std::unique_ptr<Behaviour>> m_behaviours;
 
       void InitEventSubscriptions();
       void Update();

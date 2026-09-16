@@ -2,28 +2,28 @@
 
 namespace Bobert {
 
-  Application::Application() : m_eventManager{}, m_currentWindow(800, 600, "WHSAAAT", &m_eventManager) {
+  Application::Application() : m_eventManager{} {
     Logger::Init();
     InitEventSubscriptions();
   }
 
 
   void Application::InitEventSubscriptions() {
-    Subscribe<KeyPressEvent>(&WindowBehaviour::OnKeyPress);
-    Subscribe<KeyReleaseEvent>(&WindowBehaviour::OnKeyRelease);
-    Subscribe<MousePressEvent>(&WindowBehaviour::OnMousePress);
-    Subscribe<MouseReleaseEvent>(&WindowBehaviour::OnMouseRelease);
-    Subscribe<MousePositionEvent>(&WindowBehaviour::OnMousePosition);
-    Subscribe<MouseEnterEvent>(&WindowBehaviour::OnMouseEnter);
+    Subscribe<KeyPressEvent>(&Behaviour::OnKeyPress);
+    Subscribe<KeyReleaseEvent>(&Behaviour::OnKeyRelease);
+    Subscribe<MousePressEvent>(&Behaviour::OnMousePress);
+    Subscribe<MouseReleaseEvent>(&Behaviour::OnMouseRelease);
+    Subscribe<MousePositionEvent>(&Behaviour::OnMousePosition);
+    Subscribe<MouseEnterEvent>(&Behaviour::OnMouseEnter);
   }
 
 
   template <typename EventType>
-  void Application::Subscribe(void (WindowBehaviour::*memberFunc)(const EventType&)) {
+  void Application::Subscribe(void (Behaviour::*memberFunc)(const EventType&)) {
     m_eventManager.Subscribe<EventType>(EventType::GetStaticType(), [this, memberFunc](const EventType& e) {
-      for (auto& winBeh : m_behaviours)
-        if (winBeh->GetWindow() && &e.GetWindow() == winBeh->GetWindow())
-          (winBeh.get()->*memberFunc)(e);
+      for (auto& beh : m_behaviours)
+        if (beh->GetWindow() && &e.GetWindow() == beh->GetWindow())
+          (beh.get()->*memberFunc)(e);
     });
   }
 
@@ -66,12 +66,17 @@ namespace Bobert {
 
   void Application::Update() {
     for (size_t i{m_windows.size()}; i > 0; --i) {
-      if (m_windows[i - 1]->WindowShouldClose()) {
+      if (m_windows[i - 1]->GetWindow() == nullptr || m_windows[i - 1]->WindowShouldClose()) {
+
+        for (size_t j{m_behaviours.size()}; j > 0; --j) {
+          if (m_behaviours[j - 1]->GetWindow() == m_windows[i - 1].get())
+            m_behaviours.erase(m_behaviours.begin() + (j - 1));
+        }
+
         m_windows.erase(m_windows.begin() + (i - 1));
       }
     }
 
-    GLFWwindow* active_window = glfwGetCurrentContext();
     for (auto& window : m_windows) {
       window->Update();
     }
