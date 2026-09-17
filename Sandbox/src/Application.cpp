@@ -4,6 +4,7 @@
 class WindowColorGreen : public Bobert::WindowBehaviour {
     public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
+
         ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
     }
 
@@ -29,10 +30,10 @@ class WindowColorRed : public Bobert::WindowBehaviour {
 
 class WindowColorYellow : public Bobert::WindowBehaviour {
     public:
-    // void OnMousePress(const Bobert::MousePressEvent& e) override {
-    //     std::cout << "MOUSE" << std::endl;
-    //     ChangeBackgroundColor(1.0f, 0.5f, 0.0f, 1.0f);
-    // }
+    void OnMousePress(const Bobert::MousePressEvent& e) override {
+        std::cout << "MOUSE" << std::endl;
+        ChangeBackgroundColor(1.0f, 0.5f, 0.0f, 1.0f);
+    }
 
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
         ChangeBackgroundColor(1.0f, 1.0f, 0.0f, 1.0f);
@@ -48,6 +49,10 @@ class Window : public Bobert::WindowBehaviour {
         void OnMouseRelease(const Bobert::MouseReleaseEvent& e) override {
            ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
         }
+
+        void OnWindowClose(const Bobert::WindowCloseEvent& e) override {
+            std::cout << "Close" << std::endl;
+        }
 };
 
 class SandBoxApp : public Bobert::Application {
@@ -56,20 +61,23 @@ public:
     }
 
     void Start() override {
-        Bobert::Window* mainWindow = GetWindow();
-        AddBehaviour<WindowColorGreen>()->SetWindow(*mainWindow);
-        AddBehaviour<Window>()->SetWindow(*mainWindow);
-
-        Bobert::Window* secondWindow = CreateNewWindow(800, 600, "Red window");;
-        if (secondWindow) {
-            AddBehaviour<WindowColorRed>()->SetWindow(*secondWindow);
-            AddBehaviour<Window>()->SetWindow(*secondWindow);
+        Bobert::WindowScene* main = CreateNewWindowScene(800, 600, "Green window");
+        if (main) {
+            main->AddBehaviour<WindowColorGreen>();
+            main->AddBehaviour<Window>();
+        }
+        std::cout << "Crazy" << std::endl;
+        Bobert::WindowScene* second = CreateNewWindowScene(800, 600, "Red window");;
+        if (second) {
+            std::cout << "YEY" << std::endl;
+            second->AddBehaviour<WindowColorRed>();
+            second->AddBehaviour<Window>();
         }
 
-        Bobert::Window* thirdWindow = CreateNewWindow(800, 600, "Yello window");;
-        if (secondWindow) {
-            AddBehaviour<WindowColorYellow>()->SetWindow(*thirdWindow);
-            AddBehaviour<Window>()->SetWindow(*thirdWindow);
+        Bobert::WindowScene* third = CreateNewWindowScene(800, 600, "Yello window");;
+        if (third) {
+            third->AddBehaviour<WindowColorYellow>();
+            third->AddBehaviour<Window>();
         }
     }
 

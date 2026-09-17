@@ -5,5 +5,5 @@ build/
 *deps/
 *docs/
 *doxygen-awesome-css/
-GameEngine/Doxygen
+GameEngine/Doxyfile
 GameEngine/doxygen-awesome-css

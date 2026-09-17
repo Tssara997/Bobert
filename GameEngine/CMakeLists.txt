@@ -24,6 +24,7 @@ add_library(Bobert SHARED
     Bobert/src/Logger.cpp
     Bobert/src/Window.cpp
     Bobert/src/Event.cpp
+    Bobert/src/WindowScene.cpp
 )
 
 target_link_libraries(Bobert PUBLIC glfw Glad)

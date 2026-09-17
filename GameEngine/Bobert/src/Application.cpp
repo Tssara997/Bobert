@@ -2,32 +2,8 @@
 
 namespace Bobert {
 
-  Application::Application() : m_eventManager{} {
+  Application::Application() {
     Logger::Init();
-    InitEventSubscriptions();
-  }
-
-
-  void Application::InitEventSubscriptions() {
-    Subscribe<KeyPressEvent>(&Behaviour::OnKeyPress);
-    Subscribe<KeyReleaseEvent>(&Behaviour::OnKeyRelease);
-    Subscribe<MousePressEvent>(&Behaviour::OnMousePress);
-    Subscribe<MouseReleaseEvent>(&Behaviour::OnMouseRelease);
-    Subscribe<MousePositionEvent>(&Behaviour::OnMousePosition);
-    Subscribe<MouseEnterEvent>(&Behaviour::OnMouseEnter);
-    Subscribe<WindowCloseEvent>(&Behaviour::OnWindowClose);
-    Subscribe<WindowFocusEvent>(&Behaviour::OnWindowFocus);
-    Subscribe<WindowResizingEvent>(&Behaviour::OnWindowResize);
-  }
-
-
-  template <typename EventType>
-  void Application::Subscribe(void (Behaviour::*memberFunc)(const EventType&)) {
-    m_eventManager.Subscribe<EventType>(EventType::GetStaticType(), [this, memberFunc](const EventType& e) {
-      for (auto& beh : m_behaviours)
-        if (beh->GetWindow() && &e.GetWindow() == beh->GetWindow())
-          (beh.get()->*memberFunc)(e);
-    });
   }
 
 
@@ -46,11 +22,16 @@ namespace Bobert {
 
     Logger::Info("Initialization GLFW succseful");
 
-    CreateNewWindow(800, 600, "Main Window");
     Start();
 
-    m_windows.front()->SetAsCurrent();
+    if (m_windowScenes.empty()) {
+      Logger::Error("No Window Scene was found, the Engine is going to close");
+      ShutDown();
+    }
 
+    m_windowScenes.front()->SetAsCurrent();
+
+    // TODO: Docelowo w Renderer
     if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
         Logger::Error("Failed to initialize GLAD");
         Logger::Info("Engine is closing");
@@ -68,28 +49,21 @@ namespace Bobert {
 
 
   void Application::Update() {
-    for (size_t i{m_windows.size()}; i > 0; --i) {
-      if (m_windows[i - 1]->GetWindow() == nullptr || m_windows[i - 1]->WindowShouldClose()) {
-
-        for (size_t j{m_behaviours.size()}; j > 0; --j) {
-          if (m_behaviours[j - 1]->GetWindow() == nullptr || m_behaviours[j - 1]->GetWindow() == m_windows[i - 1].get())
-            m_behaviours.erase(m_behaviours.begin() + (j - 1));
-        }
-
-        m_windows.erase(m_windows.begin() + (i - 1));
-      }
+    for (size_t i{m_windowScenes.size()}; i > 0; --i) {
+      if (m_windowScenes[i - 1]->ShouldClose())
+        m_windowScenes.erase(m_windowScenes.begin() + i - 1);
     }
 
-    for (auto& window : m_windows) {
-      window->Update();
+    for (auto& windowScene : m_windowScenes) {
+      windowScene->Update();
     }
 
   }
 
 
   void Application::ShutDown() {
-    for (auto& window : m_windows) {
-      window->ShutDown();
+    for (auto& windowScene : m_windowScenes) {
+      windowScene->ShutDown();
     }
 
     Logger::Info("Engine is closing");
@@ -99,31 +73,21 @@ namespace Bobert {
   }
 
 
-  Window* Application::GetWindow() {
-    return m_windows.front().get();
-  }
-
-
-  Window* Application::CreateNewWindow(int width, int height, const char* title) {
-    std::unique_ptr<Window> window = std::make_unique<Window>(width, height, title, &m_eventManager);
-      if (!window->Init()) {
+  WindowScene* Application::CreateNewWindowScene(int width, int height, std::string title) {
+    std::unique_ptr<WindowScene> windowScene = std::make_unique<WindowScene>();
+      if (!windowScene->CreateWindow(width, height, title)) {
         glfwTerminate();
         Logger::Info("Terminated GLFW");
         return nullptr;
       }
-    m_windows.push_back(std::move(window));
-    AddBehaviour<DefaultWindowBehaviour>()->SetWindow(*m_windows.back().get());
+    m_windowScenes.push_back(std::move(windowScene));
 
-    return m_windows.back().get();
+    return m_windowScenes.back().get();
   }
 
 
   const bool Application::AppShouldClose() const {
-    for (const auto& window : m_windows)
-      if (!window->WindowShouldClose())
-        return false;
-
-    return true;
+    return !m_windowScenes.size();
   }
 };
 

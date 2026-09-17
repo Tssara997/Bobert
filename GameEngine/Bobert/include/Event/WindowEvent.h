@@ -6,17 +6,17 @@ namespace Bobert {
 
   class Bobert_API WindowResizingEvent : public UserEvent {
     public:
-      WindowResizingEvent(int x, int y, Window& window) : UserEvent(window), m_x(x), m_y(y) {}
+      WindowResizingEvent(int width, int height, Window& window) : UserEvent(window), m_width(width), m_height(height) {}
 
       const EventTypeEnum GetEventType() const override {return EventTypeEnum::WindowResizingInput;}
       static const EventTypeEnum GetStaticType() {return EventTypeEnum::WindowResizingInput;}
 
-      const int GetX() const {return m_x;}
-      const int GetY() const {return m_y;}
+      const int GetWidth() const {return m_width;}
+      const int GetHeight() const {return m_height;}
 
     private:
-      int m_x;
-      int m_y;
+      int m_width;
+      int m_height;
   };
 
 

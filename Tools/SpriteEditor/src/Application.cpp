@@ -10,6 +10,10 @@ class Window : public Bobert::WindowBehaviour {
     void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
       ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
     }
+
+    void OnWindowResize(const Bobert::WindowResizingEvent& e) override {
+      std::cout << "Resize" << std::endl;
+    }
 };
 
 class ToolsApp : public Bobert::Application {
@@ -17,8 +21,8 @@ class ToolsApp : public Bobert::Application {
     ToolsApp() {}
 
     void Start() override {
-      Bobert::Window* mainWindow = GetWindow();
-      AddBehaviour<Window>()->SetWindow(*mainWindow);
+      Bobert::WindowScene* main = CreateNewWindowScene(800, 600, "MAIN");
+      main->AddBehaviour<Window>();
     }
 
     ~ToolsApp() {}

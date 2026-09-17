@@ -9,7 +9,7 @@ namespace Bobert {
   class Bobert_API Window {
     public:
 
-    Window(int width, int height, const char* title, EventManager* eventManager);
+    Window(int width, int height, std::string title, EventManager* eventManager);
     ~Window();
 
     bool Init();
@@ -38,7 +38,7 @@ namespace Bobert {
     private:
      int m_width;
      int m_height;
-     const char* m_title;
+     std::string m_title;
      bool m_windowShouldClose = false;
      GLFWwindow* m_window;
      EventManager* m_eventManager;

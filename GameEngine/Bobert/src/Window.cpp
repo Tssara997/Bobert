@@ -1,7 +1,7 @@
 #include "include/Window.h"
 
 namespace Bobert {
-  Window::Window(int width, int height, const char* title, EventManager* eventManager) : m_width{width}, m_height{height}, m_title{title}, m_eventManager{eventManager} {
+  Window::Window(int width, int height, std::string title, EventManager* eventManager) : m_width{width}, m_height{height}, m_title{title}, m_eventManager{eventManager} {
     m_backgroundColor =  {0.1f, 0.1f, 0.15f, 1.0f};
   }
 
@@ -13,11 +13,7 @@ namespace Bobert {
 
 
   bool Window::Init() {
-    if (m_title == nullptr) {
-      Logger::Info("Init of empty Window");
-    }
-
-    m_window = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
+    m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
 
     if (!m_window) {
       Logger::Error("Failed to create a GLFW window");
@@ -55,8 +51,11 @@ namespace Bobert {
 
 
   void Window::ShutDown() {
-    glfwDestroyWindow(m_window);
-    Logger::Info("Destroyed window");
+    if (m_window) {
+      glfwDestroyWindow(m_window);
+      m_window = nullptr;
+      Logger::Info("Destroyed window");
+    }
   }
 
 
@@ -171,7 +170,7 @@ namespace Bobert {
 
     other.m_width = 0;
     other.m_height = 0;
-    other.m_title = nullptr;
+    other.m_title = "";
     other.m_windowShouldClose = false;
     other.m_window = nullptr;
     other.m_eventManager = nullptr;
@@ -199,7 +198,7 @@ namespace Bobert {
 
     other.m_width = 0;
     other.m_height = 0;
-    other.m_title = nullptr;
+    other.m_title = "";
     other.m_windowShouldClose = false;
     other.m_window = nullptr;
     other.m_eventManager = nullptr;

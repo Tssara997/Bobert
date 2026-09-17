@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Event/EventManager.h"
-#include "Behaviours/DefaultWindowBehaviour.h"
+#include "WindowScene.h"
 
 namespace Bobert {
   class Bobert_API Application {
@@ -12,28 +11,13 @@ namespace Bobert {
 
       virtual void Start() {};
 
-      template <typename B>
-      B* AddBehaviour() {
-        auto behaviour = std::make_unique<B>();
-        B* raw_ptr = behaviour.get();
-        m_behaviours.push_back(std::move(behaviour));
-        return raw_ptr;
-      }
-
-      template <typename EventType>
-      void Subscribe(void (Behaviour::*memberFunc)(const EventType&));
-
-      Window* GetWindow();
-      Window* CreateNewWindow(int width, int height, const char* title);
+      WindowScene* CreateNewWindowScene(int width, int height, std::string title);
 
       void Run();
     
     private:
-      EventManager m_eventManager;
-      std::vector<std::unique_ptr<Window>> m_windows;
-      std::vector<std::unique_ptr<Behaviour>> m_behaviours;
+      std::vector<std::unique_ptr<WindowScene>> m_windowScenes;
 
-      void InitEventSubscriptions();
       void Update();
       void ShutDown();
 
