@@ -3,3 +3,7 @@
 build/
 *.log
 *deps/
+*docs/
+*doxygen-awesome-css/
+GameEngine/Doxygen
+GameEngine/doxygen-awesome-css
