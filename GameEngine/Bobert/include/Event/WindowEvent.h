@@ -4,9 +4,9 @@
 
 namespace Bobert {
 
-  class Bobert_API WindowResizingEvent : public UserEvent {
+  class Bobert_API WindowResizingEvent : public Event {
     public:
-      WindowResizingEvent(int width, int height, Window& window) : UserEvent(window), m_width(width), m_height(height) {}
+      WindowResizingEvent(int width, int height) : m_width(width), m_height(height) {}
 
       const EventTypeEnum GetEventType() const override {return EventTypeEnum::WindowResizingInput;}
       static const EventTypeEnum GetStaticType() {return EventTypeEnum::WindowResizingInput;}
@@ -20,18 +20,18 @@ namespace Bobert {
   };
 
 
-  class Bobert_API WindowCloseEvent : public UserEvent {
+  class Bobert_API WindowCloseEvent : public Event {
     public:
-      WindowCloseEvent(Window& window) : UserEvent(window){}
+      WindowCloseEvent() {}
 
       const EventTypeEnum GetEventType() const override {return EventTypeEnum::WindowClosingInput;}
       static const EventTypeEnum GetStaticType() {return EventTypeEnum::WindowClosingInput;}
   };
 
 
-  class Bobert_API WindowFocusEvent : public UserEvent {
+  class Bobert_API WindowFocusEvent : public Event {
     public:
-      WindowFocusEvent(Window& window) : UserEvent(window){}
+      WindowFocusEvent() {}
 
       const EventTypeEnum GetEventType() const override {return EventTypeEnum::WindowFocusInput;}
       static const EventTypeEnum GetStaticType() {return EventTypeEnum::WindowFocusInput;}

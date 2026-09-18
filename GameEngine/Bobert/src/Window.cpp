@@ -66,9 +66,9 @@ namespace Bobert {
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
     if (action == GLFW_RELEASE)
-      app->m_eventManager->TriggerEvent(KeyReleaseEvent(key, *app));
+      app->m_eventManager->TriggerEvent(KeyReleaseEvent(key));
     else
-      app->m_eventManager->TriggerEvent(KeyPressEvent(key, action == GLFW_REPEAT, *app));
+      app->m_eventManager->TriggerEvent(KeyPressEvent(key, action == GLFW_REPEAT));
   }
 
 
@@ -78,9 +78,9 @@ namespace Bobert {
 
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
     if (action == GLFW_RELEASE)
-      app->m_eventManager->TriggerEvent(MouseReleaseEvent(button, *app));
+      app->m_eventManager->TriggerEvent(MouseReleaseEvent(button));
     else
-      app->m_eventManager->TriggerEvent(MousePressEvent(button, action == GLFW_REPEAT, *app));
+      app->m_eventManager->TriggerEvent(MousePressEvent(button, action == GLFW_REPEAT));
   }
 
 
@@ -89,7 +89,7 @@ namespace Bobert {
       return;
 
     Window*app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->m_eventManager->TriggerEvent(MousePositionEvent(xpos, ypos, *app));
+    app->m_eventManager->TriggerEvent(MousePositionEvent(xpos, ypos));
   }
 
 
@@ -98,27 +98,27 @@ namespace Bobert {
       return;
 
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->m_eventManager->TriggerEvent(MouseEnterEvent(entered == 1, *app));
+    app->m_eventManager->TriggerEvent(MouseEnterEvent(entered == 1));
   }
 
 
   void Window::window_should_close_callback(GLFWwindow* window) {
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
     glfwSetWindowShouldClose(window, GLFW_TRUE);
-    app->m_eventManager->TriggerEvent(WindowCloseEvent(*app));
+    app->m_eventManager->TriggerEvent(WindowCloseEvent());
     app->m_windowShouldClose = true;
   }
 
 
   void Window::window_size_callback(GLFWwindow* window, int width, int height) {
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->m_eventManager->TriggerEvent(WindowResizingEvent(width, height, *app));
+    app->m_eventManager->TriggerEvent(WindowResizingEvent(width, height));
   }
 
 
   void Window::window_focus_callback(GLFWwindow* window, int focus) {
     Window* app = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->m_eventManager->TriggerEvent(WindowFocusEvent(*app));
+    app->m_eventManager->TriggerEvent(WindowFocusEvent());
   }
 
 
@@ -143,7 +143,7 @@ namespace Bobert {
 
 
   void Window::Close() {
-    m_eventManager->TriggerEvent(WindowCloseEvent(*this));
+    m_eventManager->TriggerEvent(WindowCloseEvent());
     m_windowShouldClose = true;
   }
 

@@ -3,7 +3,7 @@
 
 namespace Bobert {
   /// @brief Child of Bobert::Event, represents an event of a key input. Base class, not callable, used as a base for all key input events.
-  class KeyEvent : public UserEvent
+  class KeyEvent : public Event
     {
         public:
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyInput;}
@@ -14,7 +14,7 @@ namespace Bobert {
             const int GetKey() const {return m_key;}
 
         protected:
-            KeyEvent(int key, Window& window) : UserEvent(window), m_key{key} {}
+            KeyEvent(int key) : m_key{key} {}
             int m_key; ///< A GLFW key code as int, of a key that caused an event.
 
     };
@@ -23,7 +23,7 @@ namespace Bobert {
   class KeyPressEvent : public KeyEvent
     {
       public:
-        KeyPressEvent(int key, bool isRepeat, Window& window) : KeyEvent(key, window), m_isRepeat{isRepeat} {}
+        KeyPressEvent(int key, bool isRepeat) : KeyEvent(key), m_isRepeat{isRepeat} {}
 
         const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyPressInput;}
         static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyPressInput;}
@@ -39,7 +39,7 @@ namespace Bobert {
   class KeyReleaseEvent : public KeyEvent
   {
     public:
-      KeyReleaseEvent(int key, Window& window) : KeyEvent(key, window) {}
+      KeyReleaseEvent(int key) : KeyEvent(key) {}
 
       const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyReleaseInput;}
       static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyReleaseInput;}

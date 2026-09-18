@@ -2,9 +2,9 @@
 #include "Event.h"
 
 namespace Bobert {
-    class MousePositionEvent : public UserEvent {
+    class MousePositionEvent : public Event {
         public:
-            MousePositionEvent(double xpos, double ypos, Window& window) : UserEvent(window), m_xpos{xpos}, m_ypos{ypos} {}
+            MousePositionEvent(double xpos, double ypos) : m_xpos{xpos}, m_ypos{ypos} {}
 
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::MousePositionInput;}
             static const EventTypeEnum GetStaticType() {return EventTypeEnum::MousePositionInput;}
@@ -18,9 +18,9 @@ namespace Bobert {
     };
 
 
-    class MouseEnterEvent : public UserEvent {
+    class MouseEnterEvent : public Event {
         public:
-            MouseEnterEvent(bool isEnter, Window& window) : UserEvent(window), m_isEnter(isEnter) {}
+            MouseEnterEvent(bool isEnter) : m_isEnter(isEnter) {}
 
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::MouseEnterInput;}
             static const EventTypeEnum GetStaticType() {return EventTypeEnum::MouseEnterInput;}
@@ -31,7 +31,7 @@ namespace Bobert {
     };
 
 
-    class MouseInputEvent : public UserEvent
+    class MouseInputEvent : public Event
     {
         public:
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::MouseInput;}
@@ -39,14 +39,14 @@ namespace Bobert {
 
             const int GetButton() const {return m_button;}
         protected:
-            MouseInputEvent(int button, Window& window) : UserEvent(window), m_button{button} {}
+            MouseInputEvent(int button) : m_button{button} {}
             int m_button;
     };
 
 
     class MousePressEvent : public MouseInputEvent {
         public:
-            MousePressEvent(int button, bool isRepeat, Window& window) : MouseInputEvent(button, window), m_isRepeat{isRepeat} {}
+            MousePressEvent(int button, bool isRepeat) : MouseInputEvent(button), m_isRepeat{isRepeat} {}
 
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::MousePressInput;}
             static const EventTypeEnum GetStaticType() {return EventTypeEnum::MousePressInput;}
@@ -59,7 +59,7 @@ namespace Bobert {
 
     class MouseReleaseEvent : public MouseInputEvent {
         public:
-            MouseReleaseEvent(int button, Window& window) : MouseInputEvent(button, window) {}
+            MouseReleaseEvent(int button) : MouseInputEvent(button) {}
 
             const EventTypeEnum GetEventType() const override {return EventTypeEnum::MouseReleaseInput;}
             static const EventTypeEnum GetStaticType() {return EventTypeEnum::MouseReleaseInput;}

@@ -23,7 +23,6 @@ add_library(Bobert SHARED
     Bobert/src/Application.cpp
     Bobert/src/Logger.cpp
     Bobert/src/Window.cpp
-    Bobert/src/Event.cpp
     Bobert/src/WindowScene.cpp
 )
 
