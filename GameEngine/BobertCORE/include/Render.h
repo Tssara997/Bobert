@@ -15,7 +15,7 @@ namespace Bobert {
       void BeginFrame();
       void EndFrame();
 
-      void SetBackgroundColor(const float& r, const float& g, const float& b, const float& a);
+      void SetBackgroundColor(std::array<float, 4> backgroundColor);
 
     private:
       inline static const std::array<float, 4> defBackgroundColor = {0.1f, 0.1f, 0.15f, 1.0f};

@@ -41,7 +41,7 @@ namespace Bobert {
       for (const auto& scene : m_windowScenes) {
         scene->SetAsCurrent();
         m_render.BeginFrame();
-        // scene->Render();
+        scene->Render(&m_render);
         m_render.EndFrame();
         scene->SwapBuffers();
         scene->PollEvents();

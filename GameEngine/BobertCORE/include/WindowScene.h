@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Event/EventManager.h"
-#include "Behaviours/Behaviour.h"
 #include "Behaviours/DefaultWindowBehaviour.h"
+#include "Behaviours/RenderBehaviour.h"
 #include "Event/EventManager.h"
 #include "Window.h"
 
@@ -22,14 +22,16 @@ namespace Bobert {
       void PollEvents();
       void SwapBuffers();
 
-      void Render();
+      void Render(Render* render);
 
       bool ShouldClose();
 
       template <typename B>
       void AddBehaviour() {
         auto behaviour = std::make_unique<B>();
-        behaviour->SetWindow(*m_window.get());
+        if constexpr (std::is_base_of_v<WindowBehaviour, B>) {
+          behaviour->SetWindow(*m_window.get());
+        }
         m_behaviours.push_back(std::move(behaviour));
       }
 

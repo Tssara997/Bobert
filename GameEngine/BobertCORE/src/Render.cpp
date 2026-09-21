@@ -25,13 +25,12 @@ namespace Bobert {
 
 
   void Render::BeginFrame() {
-    glClearColor(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
 
   void Render::EndFrame() {
-
+    glClearColor(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
   }
 
 
@@ -40,7 +39,7 @@ namespace Bobert {
   }
 
 
-  void Render::SetBackgroundColor(const float& r, const float& g, const float& b, const float& a) {
-    m_backgroundColor = {r, g, b, a};
+  void Render::SetBackgroundColor(std::array<float, 4> backgroundColor) {
+    m_backgroundColor = backgroundColor;
   }
 };
