@@ -15,9 +15,14 @@ namespace Bobert {
       void InitEventSubscriptions();
 
       bool CreateWindow(int width, int height, std::string title);
+      void ShutDown();
+
       void SetAsCurrent();
       void Update();
-      void ShutDown();
+      void PollEvents();
+      void SwapBuffers();
+
+      void Render();
 
       bool ShouldClose();
 

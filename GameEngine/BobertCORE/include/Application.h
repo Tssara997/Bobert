@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WindowScene.h"
+#include "Render.h"
 
 namespace Bobert {
   class Bobert_API Application {
@@ -17,6 +18,7 @@ namespace Bobert {
     
     private:
       std::vector<std::unique_ptr<WindowScene>> m_windowScenes;
+      Render m_render;
 
       void Update();
       void ShutDown();

@@ -4,11 +4,7 @@
 class Window : public Bobert::WindowBehaviour {
   public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
-      ChangeBackgroundColor(0.0f, 0.5f, 0.0f, 1.0f);
-    }
-
-    void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
-      ChangeBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
+      std::cout << e.GetKey() << std::endl;
     }
 
     void OnWindowResize(const Bobert::WindowResizingEvent& e) override {

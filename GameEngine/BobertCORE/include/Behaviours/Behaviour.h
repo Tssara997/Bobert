@@ -1,7 +1,7 @@
 #pragma once
 
-#include "include/Event/InputListener.h"
-#include "include/Window.h"
+#include "Event/InputListener.h"
+#include "Window.h"
 
 namespace Bobert {
   class Bobert_API Behaviour : public InputListener {

@@ -1,4 +1,4 @@
-#include "include/Application.h"
+#include "Application.h"
 
 namespace Bobert {
 
@@ -27,21 +27,25 @@ namespace Bobert {
     if (m_windowScenes.empty()) {
       Logger::Error("No Window Scene was found, the Engine is going to close");
       ShutDown();
+      return;
     }
 
-    m_windowScenes.front()->SetAsCurrent();
-
-    // TODO: Docelowo w Renderer
-    if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
-        Logger::Error("Failed to initialize GLAD");
-        Logger::Info("Engine is closing");
-        return;
+    if (!m_render.Init()) {
+      ShutDown();
+      return;
     }
-
-    Logger::Info("Initialization GLAD succseful");
 
     while(!AppShouldClose()) {
       Update();
+
+      for (const auto& scene : m_windowScenes) {
+        scene->SetAsCurrent();
+        m_render.BeginFrame();
+        // scene->Render();
+        m_render.EndFrame();
+        scene->SwapBuffers();
+        scene->PollEvents();
+      }
     }
 
     ShutDown();
@@ -66,6 +70,7 @@ namespace Bobert {
       windowScene->ShutDown();
     }
 
+    m_render.ShutDown();
     Logger::Info("Engine is closing");
     glfwTerminate();
     Logger::Info("Terminated GLFW");

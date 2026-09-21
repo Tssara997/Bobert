@@ -1,4 +1,4 @@
-#include "include/WindowScene.h"
+#include "WindowScene.h"
 
 namespace Bobert {
 
@@ -27,10 +27,32 @@ namespace Bobert {
   }
 
 
+  void WindowScene::Update() {
+    m_window->Update();
+    if (m_window->WindowShouldClose())
+      ShutDown();
+  }
+
+
   void WindowScene::SetAsCurrent() {
     if (m_window)
     {
       m_window->SetAsCurrent();
+    }
+  }
+
+
+  void WindowScene::PollEvents() {
+    if (m_window)
+    {
+      m_window->PollEvents();
+    }
+  }
+
+
+  void WindowScene::SwapBuffers() {
+    if (m_window) {
+      m_window->SwapBuffers();
     }
   }
 
@@ -56,18 +78,13 @@ namespace Bobert {
     });
   }
 
+
   // template <typename B>
   // void WindowScene::AddBehaviour() {
   //   auto behaviour = std::make_unique<B>();
   //   m_behaviours.push_back(std::move(behaviour));
   // }
 
-
-  void WindowScene::Update() {
-    m_window->Update();
-    if (m_window->WindowShouldClose())
-      ShutDown();
-  }
 
 
   void WindowScene::ShutDown() {

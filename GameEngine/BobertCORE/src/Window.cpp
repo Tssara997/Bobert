@@ -1,8 +1,8 @@
-#include "include/Window.h"
+#include "Window.h"
 
 namespace Bobert {
   Window::Window(int width, int height, std::string title, EventManager* eventManager) : m_width{width}, m_height{height}, m_title{title}, m_eventManager{eventManager} {
-    m_backgroundColor =  {0.1f, 0.1f, 0.15f, 1.0f};
+
   }
 
 
@@ -36,17 +36,21 @@ namespace Bobert {
   }
 
   void Window::Update() {
-    glfwMakeContextCurrent(m_window);
-    glClearColor(m_backgroundColor[0], m_backgroundColor[1], m_backgroundColor[2], m_backgroundColor[3]);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glfwPollEvents();
-    glfwSwapBuffers(m_window);
   }
 
 
   void Window::SetAsCurrent() {
     glfwMakeContextCurrent(m_window);
+  }
+
+
+  void Window::PollEvents() {
+    glfwPollEvents();
+  }
+
+
+  void Window::SwapBuffers() {
+    glfwSwapBuffers(m_window);
   }
 
 
@@ -148,16 +152,6 @@ namespace Bobert {
   }
 
 
-  void Window::ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a) {
-    m_backgroundColor = {r, b, g, a};
-  }
-
-
-  void Window::ChangeBackgroundColor(const std::array<float, 4>& backgroundColor) {
-    m_backgroundColor = backgroundColor;
-  }
-
-
   Window* Window::GetWindow() {
     return this;
   }
@@ -166,15 +160,12 @@ namespace Bobert {
   Window::Window(Window&& other) noexcept : m_width(other.m_width), m_height(other.m_height), m_title(other.m_title),
     m_windowShouldClose(other.m_windowShouldClose), m_window(other.m_window), m_eventManager(other.m_eventManager) {
 
-    m_backgroundColor = std::move(other.m_backgroundColor);
-
     other.m_width = 0;
     other.m_height = 0;
     other.m_title = "";
     other.m_windowShouldClose = false;
     other.m_window = nullptr;
     other.m_eventManager = nullptr;
-    other.m_backgroundColor = {};
 
     if (m_window)
       glfwSetWindowUserPointer(m_window, this);
@@ -194,7 +185,6 @@ namespace Bobert {
     m_windowShouldClose = other.m_windowShouldClose;
     m_window = other.m_window;
     m_eventManager = other.m_eventManager;
-    m_backgroundColor = std::move(other.m_backgroundColor);
 
     other.m_width = 0;
     other.m_height = 0;
@@ -202,7 +192,6 @@ namespace Bobert {
     other.m_windowShouldClose = false;
     other.m_window = nullptr;
     other.m_eventManager = nullptr;
-    other.m_backgroundColor = {};
 
     if (m_window)
       glfwSetWindowUserPointer(m_window, this);

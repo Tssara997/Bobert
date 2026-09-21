@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Event.h"
-#include "include\Logger.h"
+#include "Logger.h"
 
 #include <functional>
 

@@ -14,8 +14,11 @@ namespace Bobert {
 
     bool Init();
     void Update();
-    void SetAsCurrent();
     void ShutDown();
+
+    void SetAsCurrent();
+    void PollEvents();
+    void SwapBuffers();
 
     Window* GetWindow();
 
@@ -25,8 +28,6 @@ namespace Bobert {
     const bool WindowShouldClose() const;
 
     void Close();
-    void ChangeBackgroundColor(const float& r, const float& b, const float& g, const float& a);
-    void ChangeBackgroundColor(const std::array<float, 4>& backgroundColor);
 
     Window(const Window& other) = delete;
     Window& operator=(const Window& other) = delete;
@@ -43,8 +44,6 @@ namespace Bobert {
      GLFWwindow* m_window;
      EventManager* m_eventManager;
      bool isOnFocus = false;
-
-     std::array<float, 4> m_backgroundColor;
 
      static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
      static void mouse_button_callback(GLFWwindow* window, int button, int action, int mode);

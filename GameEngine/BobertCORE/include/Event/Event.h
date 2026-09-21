@@ -1,5 +1,5 @@
 #pragma once
-#include "include/Core.h"
+#include "Core.h"
 
 namespace Bobert {
     /// @brief Type of every event that exists in the engine. Used in Bobert::EventManager::TriggerEvent for subsription recognition.

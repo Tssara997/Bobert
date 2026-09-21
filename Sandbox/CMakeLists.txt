@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.14)
 project(Sandbox)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -6,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(Sandbox src/Application.cpp)
 
 if (USE_CUSTOM_LIBS)
-    target_link_libraries(Sandbox PRIVATE Bobert)
+    target_link_libraries(Sandbox PRIVATE BobertCORE)
 endif()
 
 if (WIN$32)
@@ -23,7 +22,7 @@ endif()
 
 add_custom_command(TARGET Sandbox POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:Bobert>
+        $<TARGET_FILE:BobertCORE>
         $<TARGET_FILE_DIR:Sandbox>
     COMMENT "Kopiowanie Bobert.dll do folderu gry..."
 )
