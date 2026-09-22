@@ -3,20 +3,21 @@
 #include "Event.h"
 
 namespace Bobert {
-  /// @brief Child of Bobert::Event, represents a resizing a window event.
+  /// @brief Child of Bobert::Event, represents a window resizing event.
   class Bobert_API WindowResizingEvent : public Event {
     public:
       WindowResizingEvent(int width, int height) : m_width(width), m_height(height) {}
 
-      const EventTypeEnum GetEventType() const override {return EventTypeEnum::WindowResizingInput;}
-      static const EventTypeEnum GetStaticType() {return EventTypeEnum::WindowResizingInput;}
+      EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::WindowResizingInput;}
+      static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::WindowResizingInput;}
 
       /// @brief Returns a new client area width.
       /// @return Width of a client area in screen coordinates.
-      const int GetWidth() const {return m_width;}
+      int GetWidth() const noexcept {return m_width;}
+
       /// @brief Returns a new client area height.
       /// @return Height of a client area in screen coordinates.
-      const int GetHeight() const {return m_height;}
+      int GetHeight() const noexcept {return m_height;}
 
     private:
       int m_width; ///< Width of a client area in screen coordinates.
@@ -24,22 +25,22 @@ namespace Bobert {
   };
 
 
-  /// @brief Child of Bobert::Event, represents a closing a window event.
+  /// @brief Child of Bobert::Event, represents a window closing event.
   class Bobert_API WindowCloseEvent : public Event {
     public:
       WindowCloseEvent() {}
 
-      const EventTypeEnum GetEventType() const override {return EventTypeEnum::WindowClosingInput;}
-      static const EventTypeEnum GetStaticType() {return EventTypeEnum::WindowClosingInput;}
+      EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::WindowClosingInput;}
+      static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::WindowClosingInput;}
   };
 
 
-  /// @brief Child of Bobert::Event, represents a focusing on the window event.
+  /// @brief Child of Bobert::Event, represents a window focus event.
   class Bobert_API WindowFocusEvent : public Event {
     public:
       WindowFocusEvent() {}
 
-      const EventTypeEnum GetEventType() const override {return EventTypeEnum::WindowFocusInput;}
-      static const EventTypeEnum GetStaticType() {return EventTypeEnum::WindowFocusInput;}
+      EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::WindowFocusInput;}
+      static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::WindowFocusInput;}
   };
 };

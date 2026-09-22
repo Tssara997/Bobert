@@ -17,7 +17,7 @@ namespace Bobert {
         public:
             /// @brief Returns the type of an event.
             /// @return An object Bobert::EventTypeEnum.
-            virtual const EventTypeEnum GetEventType() const = 0;
+            virtual EventTypeEnum GetEventType() const noexcept = 0;
         protected:
             bool m_handled {false};
         

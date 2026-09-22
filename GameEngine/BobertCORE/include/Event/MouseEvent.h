@@ -7,15 +7,15 @@ namespace Bobert {
         public:
             MousePositionEvent(double xpos, double ypos) : m_xpos{xpos}, m_ypos{ypos} {}
 
-            const EventTypeEnum GetEventType() const override {return EventTypeEnum::MousePositionInput;}
-            static const EventTypeEnum GetStaticType() {return EventTypeEnum::MousePositionInput;}
+            EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::MousePositionInput;}
+            static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::MousePositionInput;}
 
             /// @brief Returns the x position of a cursor.
             /// @return Double value representing x coordinates.
-            const double GetXpos() const {return m_xpos;}
+            double GetXpos() const noexcept {return m_xpos;}
             /// @brief Returns the y position of a cursor.
             /// @return Double value representing y coordinates.
-            const double GetYpos() const {return m_ypos;}
+            double GetYpos() const noexcept {return m_ypos;}
 
         private:
             double m_xpos; ///< Horizontal position of the cursor in window coordinates.
@@ -28,12 +28,12 @@ namespace Bobert {
         public:
             MouseEnterEvent(bool isEnter) : m_isEnter(isEnter) {}
 
-            const EventTypeEnum GetEventType() const override {return EventTypeEnum::MouseEnterInput;}
-            static const EventTypeEnum GetStaticType() {return EventTypeEnum::MouseEnterInput;}
+            EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::MouseEnterInput;}
+            static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::MouseEnterInput;}
 
             /// @brief Checks whether the mouse is entering or leaving the window.
             /// @return True if the mouse is entering a window, false if it left.
-            const bool IsEnter() const {return m_isEnter;}
+            bool IsEnter() const noexcept {return m_isEnter;}
         private:
             bool m_isEnter; ///< True if the mouse is entering a window, false if it left.
     };
@@ -43,12 +43,12 @@ namespace Bobert {
     class MouseInputEvent : public Event
     {
         public:
-            const EventTypeEnum GetEventType() const override {return EventTypeEnum::MouseInput;}
-            static const EventTypeEnum GetStaticType() {return EventTypeEnum::MouseInput;}
+            EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::MouseInput;}
+            static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::MouseInput;}
 
             /// @brief Returns the mouse button code associated with the event.
             /// @return GLFW mouse button code as int.
-            const int GetButton() const {return m_button;}
+            int GetButton() const noexcept {return m_button;}
         protected:
             MouseInputEvent(int button) : m_button{button} {}
             int m_button; ///< A GLFW mouse button code that triggered an event.
@@ -60,12 +60,12 @@ namespace Bobert {
         public:
             MousePressEvent(int button, bool isRepeat) : MouseInputEvent(button), m_isRepeat{isRepeat} {}
 
-            const EventTypeEnum GetEventType() const override {return EventTypeEnum::MousePressInput;}
-            static const EventTypeEnum GetStaticType() {return EventTypeEnum::MousePressInput;}
+            EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::MousePressInput;}
+            static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::MousePressInput;}
 
             /// @brief Checks if the mouse button event is repeated.
             /// @return True if the mouse button is held down.
-            const bool IsRepeat() const {return m_isRepeat;}
+            bool IsRepeat() const noexcept {return m_isRepeat;}
         private:
             bool m_isRepeat; ///< True if the key is held down.
     };
@@ -76,7 +76,7 @@ namespace Bobert {
         public:
             MouseReleaseEvent(int button) : MouseInputEvent(button) {}
 
-            const EventTypeEnum GetEventType() const override {return EventTypeEnum::MouseReleaseInput;}
-            static const EventTypeEnum GetStaticType() {return EventTypeEnum::MouseReleaseInput;}
+            EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::MouseReleaseInput;}
+            static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::MouseReleaseInput;}
     };
 };

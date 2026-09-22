@@ -59,7 +59,7 @@ namespace Bobert {
             }
 
             /// @brief Subscribes to a specific event, by giving a function that is going to be called when the event happens.
-            /// @tparam EventType Type of event used in callable function.
+            /// @tparam EventType Type of event used in callback function.
             /// @param eventTypeEnum A refrence to an enum value assing to the event.
             /// @param handler A refrence to a callable function that takes in refrence to a constant value of an event of an EventType class.
             template <typename EventType>

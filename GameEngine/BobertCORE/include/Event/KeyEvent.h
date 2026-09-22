@@ -6,12 +6,12 @@ namespace Bobert {
   class KeyEvent : public Event
     {
         public:
-            const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyInput;}
-            static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyInput;}
+            EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::KeyInput;}
+            static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::KeyInput;}
 
             /// @brief Returns the key code associated with the event.
             /// @return GLFW key code as int.
-            const int GetKey() const {return m_key;}
+            int GetKey() const noexcept {return m_key;}
 
         protected:
             KeyEvent(int key) : m_key{key} {}
@@ -25,12 +25,12 @@ namespace Bobert {
       public:
         KeyPressEvent(int key, bool isRepeat) : KeyEvent(key), m_isRepeat{isRepeat} {}
 
-        const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyPressInput;}
-        static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyPressInput;}
+        EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::KeyPressInput;}
+        static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::KeyPressInput;}
 
         /// @brief Checks if the key event is repeated.
         /// @return True if the key is held down, else false.
-        const bool IsRepeat() const {return m_isRepeat;}
+        bool IsRepeat() const noexcept {return m_isRepeat;}
       private:
         bool m_isRepeat; ///< True if the key is held down, else false.
     };
@@ -41,8 +41,8 @@ namespace Bobert {
     public:
       KeyReleaseEvent(int key) : KeyEvent(key) {}
 
-      const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyReleaseInput;}
-      static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyReleaseInput;}
+      EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::KeyReleaseInput;}
+      static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::KeyReleaseInput;}
   };
 };
 
