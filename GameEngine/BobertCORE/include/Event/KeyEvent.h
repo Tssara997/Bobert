@@ -2,7 +2,7 @@
 #include "Event.h"
 
 namespace Bobert {
-  /// @brief Child of Bobert::Event, represents an event of a key input. Base class, not callable, used as a base for all key input events.
+  /// @brief Base class for all key events.
   class KeyEvent : public Event
     {
         public:
@@ -10,16 +10,16 @@ namespace Bobert {
             static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyInput;}
 
             /// @brief Returns the key code associated with the event.
-            /// @return Key code (GLFW key code as int).
+            /// @return GLFW key code as int.
             const int GetKey() const {return m_key;}
 
         protected:
             KeyEvent(int key) : m_key{key} {}
-            int m_key; ///< A GLFW key code as int, of a key that caused an event.
+            int m_key; ///< A GLFW key code as int, of a key that triggered an event.
 
     };
 
-  /// @brief Child of Bobert::KeyEvent, represents an event of a key press input.
+  /// @brief Child of Bobert::KeyEvent, represents a key press event.
   class KeyPressEvent : public KeyEvent
     {
       public:
@@ -28,14 +28,14 @@ namespace Bobert {
         const EventTypeEnum GetEventType() const override {return EventTypeEnum::KeyPressInput;}
         static const EventTypeEnum GetStaticType() {return EventTypeEnum::KeyPressInput;}
 
-        /// @brief Returns a true or false statment, is the key associated with the event held down or not.
-        /// @return A bool value, is the key is held down.
+        /// @brief Checks if the key event is repeated.
+        /// @return True if the key is held down, else false.
         const bool IsRepeat() const {return m_isRepeat;}
       private:
-        bool m_isRepeat; ///< A bool value, is the key is held down.
+        bool m_isRepeat; ///< True if the key is held down, else false.
     };
 
-  /// @brief Child of Bobert::KeyEvent, represents an event of a key release input.
+  /// @brief Child of Bobert::KeyEvent, represents a key release event.
   class KeyReleaseEvent : public KeyEvent
   {
     public:
