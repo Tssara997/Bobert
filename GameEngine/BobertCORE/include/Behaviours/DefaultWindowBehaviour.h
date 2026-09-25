@@ -9,7 +9,7 @@ namespace Bobert {
       DefaultWindowBehaviour() : WindowBehaviour() {}
 
       void OnKeyPress(const KeyPressEvent& e) override {
-        if (e.GetKey() == 256)
+        if (e.GetKey() == 256 && m_window) // TODO: magic number
           m_window->Close();
       }
 

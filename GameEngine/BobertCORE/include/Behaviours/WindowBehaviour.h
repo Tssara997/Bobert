@@ -7,7 +7,7 @@ namespace Bobert {
 
     class Bobert_API WindowBehaviour : public Behaviour {
         public:
-            WindowBehaviour() { }
+            WindowBehaviour() : m_window(nullptr) { }
             void SetWindow(Window& window) {m_window = &window;}
 
             const Window* GetWindow() const {return m_window;}
