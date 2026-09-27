@@ -20,6 +20,7 @@ add_executable(tests
   test_behaviour/test_behaviour.cpp
   test_behaviour/test_windowBehaviour.cpp
   test_behaviour/test_defaultWindowBehaviour.cpp
+  test_event/test_events.cpp
 )
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain BobertCORE)
