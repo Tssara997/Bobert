@@ -7,7 +7,7 @@ namespace Bobert {
         None = 0,
         KeyInput, KeyPressInput, KeyReleaseInput,
         MouseEnterInput, MousePositionInput, MouseInput, MousePressInput, MouseReleaseInput,
-        WindowInput, WindowResizingInput, WindowClosingInput, WindowFocusInput,
+        WindowInput, WindowResizingInput, WindowCloseInput, WindowFocusInput,
         Count
     };
 
@@ -18,6 +18,7 @@ namespace Bobert {
             /// @brief Returns the type of an event.
             /// @return An object Bobert::EventTypeEnum.
             virtual EventTypeEnum GetEventType() const noexcept = 0;
+            bool IsHandled() const noexcept {return m_handled;}
         protected:
             bool m_handled {false};
         

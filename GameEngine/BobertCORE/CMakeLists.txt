@@ -36,3 +36,6 @@ set_target_properties(BobertCORE PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
 )
 
+enable_testing()
+add_subdirectory(tests)
+

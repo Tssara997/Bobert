@@ -30,8 +30,8 @@ namespace Bobert {
     public:
       WindowCloseEvent() {}
 
-      EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::WindowClosingInput;}
-      static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::WindowClosingInput;}
+      EventTypeEnum GetEventType() const noexcept override {return EventTypeEnum::WindowCloseInput;}
+      static EventTypeEnum GetStaticType() noexcept {return EventTypeEnum::WindowCloseInput;}
   };
 
 
