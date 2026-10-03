@@ -5,15 +5,19 @@ class Window : public Bobert::RenderBehaviour {
   public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
       if (e.GetKey() == 67) {
-        SetVertices({});
+        SetVertices(empty);
         return;
       }
-      SetVertices(triangle);
+      SetVertices(square);
     }
 
     void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
       if (e.GetKey() != 67)
-        SetVertices(square);
+        SetVertices(triangle);
+    }
+
+    void OnMousePress(const Bobert::MousePressEvent& e) override {
+      SetBackgroundColor(0.0f, 0.87f, 0.04f, 1.0f);
     }
 
   private:
@@ -31,6 +35,16 @@ class Window : public Bobert::RenderBehaviour {
     0.5f, -0.5f, 0.0f,
     -0.5f, -0.5f, 0.0f
   };
+
+  std::vector<float> empty = {};
+};
+
+
+class WindowColor : public Bobert::RenderBehaviour {
+  public:
+    void OnMouseRelease(const Bobert::MouseReleaseEvent& e) override {
+      SetBackgroundColor(defBackgroundColor);
+    }
 };
 
 class ToolsApp : public Bobert::Application {
@@ -40,6 +54,7 @@ class ToolsApp : public Bobert::Application {
     void Start() override {
       Bobert::WindowScene* main = CreateNewWindowScene(800, 600, "MAIN");
       main->AddBehaviour<Window>();
+      main->AddBehaviour<WindowColor>();
     }
 
     ~ToolsApp() {}

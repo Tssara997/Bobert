@@ -22,17 +22,8 @@ namespace Bobert {
     m_initalized = true;
     // return true;
 
-    // TEMP
-    // std::vector<float> vertices = {
-    //   -0.5f, -0.5f, 0.0f,
-    //   0.5f, -0.5f, 0.0f,
-    //   0.0f,  0.5f, 0.0f
-    // };
-
     glGenBuffers(1, &m_VBO);
     glGenVertexArrays(1, &m_VAO);
-    // SetVertices(vertices);
-    // SetBuffers();
 
     // shaderss
     m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -118,12 +109,16 @@ namespace Bobert {
   }
 
 
-  void Render::SetBackgroundColor(std::array<float, 4> backgroundColor) {
+  void Render::SetBackgroundColor(std::array<float, 4> backgroundColor) noexcept {
+    if (backgroundColor.empty() || m_backgroundColor == backgroundColor)
+      return;
     m_backgroundColor = backgroundColor;
   }
 
 
-  void Render::SetVertices(std::vector<float> vertices) {
+  void Render::SetVertices(const std::vector<float>& vertices) noexcept{
+    if (m_vertices == vertices)
+      return;
     m_vertices = vertices;
 
     SetBuffers();

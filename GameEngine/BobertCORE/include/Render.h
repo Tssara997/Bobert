@@ -4,7 +4,7 @@
 
 namespace Bobert {
 
-  class Render {
+  class Bobert_API Render {
     public:
       Render();
       ~Render();
@@ -17,8 +17,8 @@ namespace Bobert {
 
       void TempDrawing();
 
-      void SetBackgroundColor(std::array<float, 4> backgroundColor);
-      void SetVertices(std::vector<float> vertices);
+      void SetBackgroundColor(std::array<float, 4> backgroundColor) noexcept;
+      void SetVertices(const std::vector<float>& vertices) noexcept;
 
     private:
       void SetBuffers();
