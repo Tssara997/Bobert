@@ -4,16 +4,33 @@
 class Window : public Bobert::RenderBehaviour {
   public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
-      SetBackgroundColor(0.3f, 0.1f, 0.5f, 1.0f);
+      if (e.GetKey() == 67) {
+        SetVertices({});
+        return;
+      }
+      SetVertices(triangle);
     }
 
     void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
-      SetBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
+      if (e.GetKey() != 67)
+        SetVertices(square);
     }
 
-    void OnWindowResize(const Bobert::WindowResizingEvent& e) override {
-      std::cout << "Resize" << std::endl;
-    }
+  private:
+  std::vector<float> triangle = {
+      -0.5f, -0.5f, 0.0f,
+      0.5f, -0.5f, 0.0f,
+      0.0f,  0.5f, 0.0f
+  };
+
+  std::vector<float> square = {
+    -0.5f,  -0.5f, 0.0f,
+    -0.5f, 0.5f, 0.0f,
+    0.5f, 0.5f, 0.0f,
+    0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    -0.5f, -0.5f, 0.0f
+  };
 };
 
 class ToolsApp : public Bobert::Application {
