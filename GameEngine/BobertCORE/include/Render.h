@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Logger.h"
+#include "Shader.h"
 
 namespace Bobert {
 
@@ -28,26 +28,10 @@ namespace Bobert {
       bool m_initalized = false;
 
       std::vector<float> m_vertices;
-      // unsigned int m_verticesSize;
       unsigned int m_VBO;
       unsigned int m_VAO;
-      unsigned int m_vertexShader;
-      unsigned int m_fragmentShader;
-      int m_shaderProgram;
-
-      const char* m_vertexShaderSource = "#version 330 core\n"
-      "layout (location = 0) in vec3 aPos;\n"
-      "void main()\n"
-      "{\n"
-      "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-      "}\0";
-
-      const char* m_fragmentShaderSource = "#version 330 core\n"
-      "out vec4 FragColor;\n"
-      "void main()\n"
-      "{\n"
-         " FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-      "}\0";
+      std::unique_ptr<Shader> m_shader;
+      
   };
 
 };

@@ -22,18 +22,18 @@ class Window : public Bobert::RenderBehaviour {
 
   private:
   std::vector<float> triangle = {
-      -0.5f, -0.5f, 0.0f,
-      0.5f, -0.5f, 0.0f,
-      0.0f,  0.5f, 0.0f
+      -0.5f, -0.5f, 0.0f, 0.3f, 0.12f, 0.54f,
+      0.5f, -0.5f, 0.0f, 0.3f, 0.12f, 0.54f,
+      0.0f,  0.5f, 0.0f, 0.3f, 0.12f, 0.54f
   };
 
   std::vector<float> square = {
-    -0.5f,  -0.5f, 0.0f,
-    -0.5f, 0.5f, 0.0f,
-    0.5f, 0.5f, 0.0f,
-    0.5f, 0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f
+    -0.5f,  -0.5f, 0.0f, 0.6f, 0.32f, 0.45f,
+    -0.5f, 0.5f, 0.0f, 0.6f, 0.32f, 0.45f,
+    0.5f, 0.5f, 0.0f, 0.6f, 0.32f, 0.45f,
+    0.5f, 0.5f, 0.0f, 0.6f, 0.32f, 0.45f,
+    0.5f, -0.5f, 0.0f, 0.6f, 0.32f, 0.45f,
+    -0.5f, -0.5f, 0.0f, 0.6f, 0.32f, 0.45f
   };
 
   std::vector<float> empty = {};

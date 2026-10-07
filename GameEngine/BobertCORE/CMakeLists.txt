@@ -32,8 +32,16 @@ endif()
 
 set_target_properties(BobertCORE PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/aaaa
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_SOURCE_DIR}/include/Shaders"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Shaders"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders"
 )
 
 enable_testing()

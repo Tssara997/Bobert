@@ -9,11 +9,11 @@ target_link_libraries(SpriteEditor PRIVATE BobertCORE)
 
 
 if (WIN$32)
-    set_target_properties(Sandbox PROPERTIES
+    set_target_properties(SpriteEditor PROPERTIES
       RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Tools/SpriteEditor"
     )
 elseif (UNIX AND NOT APPLE)
-    set_target_properties(Sandbox PROPERTIES
+    set_target_properties(SpriteEditor PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Tools/SpriteEditor"
         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Tools/SpriteEditor"
         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lib"
