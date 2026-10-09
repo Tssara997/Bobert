@@ -26,7 +26,11 @@ namespace Bobert {
     glGenVertexArrays(1, &m_VAO);
 
     // shaders
-    m_shader = std::make_unique<Shader>("build/bin/Debug/shaders/vertexShader.glsl", "build/bin/Debug/shaders/fragmentShader.glsl");
+    m_vShaderPath = Logger::m_working_directory; 
+    m_vShaderPath += std::filesystem::path("/build/bin/Debug/shaders/vertexShader.glsl"); //TEMP
+    m_fShaderPath = Logger::m_working_directory;
+    m_fShaderPath += std::filesystem::path("/build/bin/Debug/shaders/fragmentShader.glsl"); //TEMP
+    m_shader = std::make_unique<Shader>(m_vShaderPath.string().c_str(), m_fShaderPath.string().c_str());
     return true;
   }
 
@@ -42,7 +46,12 @@ namespace Bobert {
     m_shader->use();
     // ourShader.setFloat("someUniform", 1.0f);
     glBindVertexArray(m_VAO);
-    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size() / 6);
+    for (size_t i{}; i < m_models.size(); ++i) {
+      // private VAO bound to the asset
+      glBindVertexArray(m_models.at(i).VAO);
+      glDrawArraysInstanced(GL_TRIANGLES, 0, 3, m_models.size());
+    }
+    // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size() / 6);
   }
 
 
@@ -72,8 +81,26 @@ namespace Bobert {
   }
 
 
+  void Render::AddModel(const Asset& model) {
+    m_models.push_back(model);
+    SetModelBuffers(m_models.back());
+  }
+
+
+  void Render::SetModelBuffers(Asset model) {
+    glGenVertexArrays(model.VAO, &model.VAO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribDivisor(2, 1);
+  }
+
+
   void Render::SetBuffers() {
-    glBindVertexArray(m_VAO);
+    glBindVertexArray(m_VAO); // Temp
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(float), m_vertices.data(), GL_STATIC_DRAW);
@@ -83,5 +110,8 @@ namespace Bobert {
 
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // glVertexAttribDivisor(2, 1);
+    // glVertexAttribDivisor(1, 1);
   }
 };

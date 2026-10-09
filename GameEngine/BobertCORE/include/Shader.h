@@ -68,7 +68,10 @@ namespace Bobert {
                     std::string msg = "Shader vertex error ";
                     msg += infoLog;
                     Logger::Error(msg);
-                };
+                }
+                else {
+                    Logger::Info("Shader vertex created");
+                }
                 
                 // similiar for Fragment Shader
                 fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -82,7 +85,10 @@ namespace Bobert {
                     std::string msg = "Fragment vertex error ";
                     msg += infoLog;
                     Logger::Error(msg);
-                };
+                }
+                else {
+                    Logger::Info("Shader fragment created");
+                }
                 
                 // shader Program
                 ID = glCreateProgram();
@@ -97,6 +103,9 @@ namespace Bobert {
                     std::string msg = "Shader program error ";
                     msg += infoLog;
                     Logger::Error(msg);
+                }
+                else {
+                    Logger::Info("Shader program created");
                 }
                 
                 // delete the shaders as they're linked into our program now and no longer necessary

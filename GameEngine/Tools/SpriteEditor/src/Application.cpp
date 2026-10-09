@@ -4,27 +4,40 @@
 class Window : public Bobert::RenderBehaviour {
   public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
-      if (e.GetKey() == 67) {
-        SetVertices(empty);
-        return;
+      // if (e.GetKey() == 67) {
+      //   SetVertices(empty);
+      //   return;
+      // }
+      if(notDone) {
+        SetVertices(triangle);
+        for(unsigned int i{}; i < 10; ++i) {
+          auto pos = triangle;
+          for (auto&  p : pos) {
+            p += i;
+          }  
+          auto ass = Bobert::Asset{pos, i };
+          this->AddModel(ass);
+        }
+        notDone = false;
       }
-      SetVertices(square);
+      
     }
 
     void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
-      if (e.GetKey() != 67)
-        SetVertices(triangle);
+      // if (e.GetKey() != 67)
+      //   SetVertices(triangle);
     }
 
     void OnMousePress(const Bobert::MousePressEvent& e) override {
-      SetBackgroundColor(0.0f, 0.87f, 0.04f, 1.0f);
+      // SetBackgroundColor(0.0f, 0.87f, 0.04f, 1.0f);
     }
 
   private:
+  bool notDone = true;
   std::vector<float> triangle = {
-      -0.5f, -0.5f, 0.0f, 0.3f, 0.12f, 0.54f,
-      0.5f, -0.5f, 0.0f, 0.3f, 0.12f, 0.54f,
-      0.0f,  0.5f, 0.0f, 0.3f, 0.12f, 0.54f
+      -0.1f, -0.1f, 0.0f, 0.3f, 0.12f, 0.54f,
+      0.1f, -0.1f, 0.0f, 0.3f, 0.12f, 0.54f,
+      0.0f,  0.1f, 0.0f, 0.3f, 0.12f, 0.54f
   };
 
   std::vector<float> square = {
