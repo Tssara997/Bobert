@@ -42,6 +42,7 @@ namespace Bobert {
         scene->SetAsCurrent();
         m_render.BeginFrame();
         scene->Render(&m_render);
+        m_render.TempDrawing();
         m_render.EndFrame();
         scene->SwapBuffers();
         scene->PollEvents();

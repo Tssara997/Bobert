@@ -22,8 +22,10 @@ set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(glfw)
 
 # glad
-add_library(Glad STATIC deps/glad/src/glad.c)
+add_library(Glad STATIC deps/glad/src/gl.c)
+
 target_include_directories(Glad PUBLIC deps/glad/include)
+set_target_properties(Glad PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 
 add_subdirectory(BobertCORE)
