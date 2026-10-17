@@ -60,7 +60,7 @@ namespace Bobert {
   void WindowScene::Render(Bobert::Render* render) {
     for (auto& beh : m_behaviours) {
       if (RenderBehaviour* renBeh = dynamic_cast<RenderBehaviour*>(beh.get())) {
-        renBeh->Render(render);
+        renBeh->GiveToRender(render);
       }
     }
   }

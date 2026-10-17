@@ -3,8 +3,6 @@
 #include "Event/EventManager.h"
 #include "Behaviours/DefaultWindowBehaviour.h"
 #include "Behaviours/RenderBehaviour.h"
-#include "Event/EventManager.h"
-#include "Window.h"
 
 namespace Bobert {
   class Bobert_API WindowScene {

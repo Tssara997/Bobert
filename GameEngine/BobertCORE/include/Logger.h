@@ -28,10 +28,14 @@ namespace Bobert {
       static void Error(const std::string& message);
       static void Critical(const std::string& message);
 
+      // static std::filesystem::path GetWorkingDirectory();
+      inline static const std::filesystem::path m_working_directory = std::filesystem::current_path();
+
     private:
+      
       Logger() = default;
 
-      inline static std::chrono::system_clock::time_point TimeStart = std::chrono::system_clock::now();
+      inline static const std::chrono::system_clock::time_point TimeStart = std::chrono::system_clock::now();
       static constexpr std::string_view LoggerName = "Bobert_logger";
       inline static const std::filesystem::path fullPath = "Bobert.log";
       static constexpr std::string_view fmt = "[{}] [{}] {}";

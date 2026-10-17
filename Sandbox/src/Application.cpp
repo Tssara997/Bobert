@@ -1,10 +1,10 @@
 #include <Bobert.h>
 #include <iostream>
 
-class WindowColorGreen : public Bobert::WindowBehaviour {
+class WindowColorGreen : public Bobert::RenderBehaviour {
     public:
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
-
+        SetBackgroundColor(0.0f, 1.0f, 0.0f, 1.0f);
     }
 
     void OnMouseEnter(const Bobert::MouseEnterEvent& e) override {
@@ -13,26 +13,36 @@ class WindowColorGreen : public Bobert::WindowBehaviour {
         else
             std::cout << "Noooo, come back. Pretty please :(" << std::endl;
     }
-};
 
-class WindowColorRed : public Bobert::WindowBehaviour {
-    public:
-    // void OnMousePress(const Bobert::MousePressEvent& e) override {
-    //     std::cout << "MOUSE" << std::endl;
-    //     ChangeBackgroundColor(1.0f, 0.5f, 0.0f, 1.0f);
-    // }
-
-    void OnKeyPress(const Bobert::KeyPressEvent& e) override {
+    void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
+        SetBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
     }
 };
 
-class WindowColorYellow : public Bobert::WindowBehaviour {
+class WindowColorRed : public Bobert::RenderBehaviour {
+    public:
+
+    void OnKeyPress(const Bobert::KeyPressEvent& e) override {
+        SetBackgroundColor(1.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
+        SetBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
+    }
+};
+
+class WindowColorYellow : public Bobert::RenderBehaviour {
     public:
     void OnMousePress(const Bobert::MousePressEvent& e) override {
         std::cout << "MOUSE" << std::endl;
     }
 
     void OnKeyPress(const Bobert::KeyPressEvent& e) override {
+        SetBackgroundColor(0.5f, 0.5f, 0.0f, 1.0f);
+    }
+
+    void OnKeyRelease(const Bobert::KeyReleaseEvent& e) override {
+        SetBackgroundColor(defBackgroundColor[0], defBackgroundColor[1], defBackgroundColor[2], defBackgroundColor[3]);
     }
 };
 
@@ -46,7 +56,6 @@ public:
         if (main) {
             main->AddBehaviour<WindowColorGreen>();
         }
-        std::cout << "Crazy" << std::endl;
         Bobert::WindowScene* second = CreateNewWindowScene(800, 600, "Red window");;
         if (second) {
             std::cout << "YEY" << std::endl;

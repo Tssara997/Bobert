@@ -126,4 +126,9 @@ namespace Bobert {
     oss << std::put_time(&now_tm, "%H:%M:%S");
     return oss.str();
   }
+
+
+  // static std::filesystem::path Logger::GetWorkingDirectory() {
+  //   return m_working_directory;
+  // }
 }
