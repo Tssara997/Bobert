@@ -10,13 +10,11 @@ class Window : public Bobert::RenderBehaviour {
       // }
       if(notDone) {
         SetVertices(triangle);
-        for(unsigned int i{}; i < 10; ++i) {
-          auto pos = triangle;
-          for (auto&  p : pos) {
-            p += i;
-          }  
-          auto ass = Bobert::Asset{pos, i };
-          this->AddModel(ass);
+        for(float i{-2}; i < 2; i += 0.2f) {
+          for(float j{-2}; j < 2; j += 0.2f) {
+            auto ass = Bobert::Asset{triangle, 1, glm::vec3(i, j, 0)};
+            this->AddModel(ass);
+          }
         }
         notDone = false;
       }

@@ -22,8 +22,9 @@ namespace Bobert {
     m_initalized = true;
     // return true;
 
-    glGenBuffers(1, &m_VBO);
     glGenVertexArrays(1, &m_VAO);
+    glGenBuffers(1, &m_VBO);
+    glGenBuffers(1, &m_instanceVBO);
 
     // shaders
     m_vShaderPath = Logger::m_working_directory; 
@@ -45,13 +46,16 @@ namespace Bobert {
       return;
     m_shader->use();
     // ourShader.setFloat("someUniform", 1.0f);
-    glBindVertexArray(m_VAO);
-    for (size_t i{}; i < m_models.size(); ++i) {
-      // private VAO bound to the asset
-      glBindVertexArray(m_models.at(i).VAO);
-      glDrawArraysInstanced(GL_TRIANGLES, 0, 3, m_models.size());
-    }
+    // glBindVertexArray(m_VAO);
     // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size() / 6);
+
+    glBindVertexArray(m_VAO);
+
+    // Rysujemy wierzchołki geometrii w liczbie podanych instancji
+    unsigned int vertexCount = m_vertices.size() / 6; // Każdy wierzchołek ma 6 floatów (pos + color)
+    glDrawArraysInstanced(GL_TRIANGLES, 0, vertexCount, static_cast<GLsizei>(m_instancePositions.size()));
+
+    glBindVertexArray(0);
   }
 
 
@@ -61,7 +65,9 @@ namespace Bobert {
 
 
   void Render::ShutDown() {
-
+    if (m_VAO) glDeleteVertexArrays(1, &m_VAO);
+    if (m_VBO) glDeleteBuffers(1, &m_VBO);
+    if (m_instanceVBO) glDeleteBuffers(1, &m_instanceVBO);
   }
 
 
@@ -77,29 +83,42 @@ namespace Bobert {
       return;
     m_vertices = vertices;
 
-    SetBuffers();
-  }
+    glBindVertexArray(m_VAO); // Temp
 
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(float), m_vertices.data(), GL_STATIC_DRAW);
 
-  void Render::AddModel(const Asset& model) {
-    m_models.push_back(model);
-    SetModelBuffers(m_models.back());
-  }
-
-
-  void Render::SetModelBuffers(Asset model) {
-    glGenVertexArrays(model.VAO, &model.VAO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+    glEnableVertexAttribArray(2);
+
     glVertexAttribDivisor(2, 1);
+
+    glBindVertexArray(0);
+  }
+
+
+  void Render::AddModel(const Asset& model) {
+    m_instancePositions.push_back(model.pos);
+    SetModelBuffers();
+  }
+
+
+  void Render::SetModelBuffers() {
+    glBindBuffer(GL_ARRAY_BUFFER, m_instanceVBO);
+    glBufferData(GL_ARRAY_BUFFER, m_instancePositions.size() * sizeof(glm::vec3), m_instancePositions.data(), GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 
 
   void Render::SetBuffers() {
+    glGenVertexArrays(1, &m_VAO);
     glBindVertexArray(m_VAO); // Temp
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);

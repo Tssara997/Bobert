@@ -2,8 +2,6 @@ project(BobertCORE)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(glm REQUIRED)
-
 add_library(BobertCORE SHARED
     src/Application.cpp
     src/Logger.cpp
@@ -14,7 +12,7 @@ add_library(BobertCORE SHARED
 
 target_include_directories(BobertCORE PUBLIC include)
 
-target_link_libraries(BobertCORE PUBLIC glfw Glad OpenGL::GL glm::glm)
+target_link_libraries(BobertCORE PUBLIC glfw Glad OpenGL::GL glm::glm nlohmann_json::nlohmann_json)
 
 target_precompile_headers(BobertCORE PRIVATE include/pch.h)
 
